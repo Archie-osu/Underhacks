@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Hook Base">
+      <UniqueIdentifier>{fcbfc957-794c-4a1d-a901-e7b87ae57105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK">
+      <UniqueIdentifier>{11779573-69d3-4dd6-a32d-d1b4edeb8534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Understats">
+      <UniqueIdentifier>{9c03b52a-acae-4cdf-a218-32cde03f200b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Understats\Hooks">
+      <UniqueIdentifier>{772d092e-14c6-4aad-b671-c101d89a5ea4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Understats\ImGui">
+      <UniqueIdentifier>{af76a9eb-ffa1-44e1-bf15-14a9901c6391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Understats\Menu">
+      <UniqueIdentifier>{1c267b8b-f30c-4fcd-970b-a9174152bc65}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DllMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HookBase.cpp">
+      <Filter>Resource Files\Hook Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK.cpp">
+      <Filter>Resource Files\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks.cpp">
+      <Filter>Resource Files\Understats\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx9.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Resource Files\Understats\Menu</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HookBase.hpp">
+      <Filter>Resource Files\Hook Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK.hpp">
+      <Filter>Resource Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks.hpp">
+      <Filter>Resource Files\Understats\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx9.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.hpp">
+      <Filter>Resource Files\Understats\Menu</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
