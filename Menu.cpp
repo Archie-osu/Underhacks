@@ -2,11 +2,10 @@
 
 void nMenu::DrawMenu()
 {
-	static bool bInitialized = false;
-
 	if (!bInitializedWindow) {
 		ImGui::SetWindowPos(ImVec2(10, 10));
-		ImGui::SetWindowSize(vMenuSize);
+		ImGui::SetWindowSize(ImVec2((float)500, (float)500));
+		
 		bInitializedWindow = true;
 	}
 
@@ -27,8 +26,9 @@ void nMenu::DrawMenu()
 	switch (nCurrentTab)
 	{
 	case TAB_INFO:
-
-		ImGui::Text("Info Tab");
+		ImGui::Text("Info");
+		ImGui::Text("Underhacks version: 1.00");
+		ImGui::Text("Base Pointer: ");
 		break;
 	case TAB_PLAYER:
 		ImGui::Text("Player Tab");

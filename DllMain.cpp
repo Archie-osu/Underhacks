@@ -4,6 +4,8 @@
 DWORD WINAPI Init(HMODULE hModule)
 {
 	nHooks::Initialize();
+	gVars::Initialize();
+
 	return 0;
 }
 

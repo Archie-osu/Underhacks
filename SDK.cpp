@@ -64,8 +64,25 @@ bool nDX::GetD3D9Device(void** pTable, size_t Size)
 
 #pragma endregion 
 
-void nTestDrawing::DrawFilledRect(int x, int y, int w, int h, D3DCOLOR color, IDirect3DDevice9* dev)
+#pragma region Game
+
+
+#pragma endregion
+
+void gVars::Initialize()
 {
-	D3DRECT BarRect = { x, y, x + w, y + h };
-	dev->Clear(1, &BarRect, D3DCLEAR_TARGET | D3DCLEAR_TARGET, color, 0, 0);
+	hCurrentProcess = GetCurrentProcess();
+	dwBase = nMemory::GetModuleHandleSafe(L"UNDERTALE.exe");
+}
+
+HMODULE nMemory::GetModuleHandleSafe(const wchar_t* pszModuleName)
+{
+	HMODULE hmModuleHandle = nullptr;
+
+	do {
+		hmModuleHandle = GetModuleHandleW(pszModuleName);
+		Sleep(1);
+	} while (hmModuleHandle == nullptr);
+
+	return hmModuleHandle;
 }
