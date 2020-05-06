@@ -23,8 +23,6 @@ void nMenu::DrawMenu()
 
 			ImGui::EndMenuBar();
 		}
-		const double twenty = 20.0;
-		const double one = 1.0;
 
 		switch (nCurrentTab)
 		{
@@ -33,9 +31,12 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.00");
+			ImGui::Text("Underhacks version: 1.1.0 dev");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
+			ImGui::Text(std::string("Static Room: " + std::to_string(*gVars::GetRoomPointer())).c_str());
+			ImGui::Text(std::string("CUserCmd Room: " + std::to_string(gVars::GetCmd()->m_nRoom)).c_str());
+			ImGui::Text(std::string("mov [UNDERTALE.exe+618A0,esi]: " + DecToHex(gVars::dwChangeRoomFn)).c_str());
 
 			if (ImGui::Button("Recalculate Addresses", ImVec2(175, 20)))
 				gVars::Initialize();
@@ -55,7 +56,11 @@ void nMenu::DrawMenu()
 		case TAB_WORLD:
 			ImGui::Text("World Tab");
 
-			
+			ImGui::NewLine();
+
+			if (ImGui::Button("why tf does this not work", ImVec2(200, 20)))
+				gVars::SetRoom(0x108);
+
 			break;
 		}
 		ImGui::End();

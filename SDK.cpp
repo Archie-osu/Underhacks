@@ -1,4 +1,9 @@
 #include "SDK.hpp"
+#include <Psapi.h>
+#define INRANGE(x,a,b)    ((x) >= (a) && (x) <= (b))
+#define INRANGE(x,a,b)    ((x) >= (a) && (x) <= (b))
+#define getBits( x )    (INRANGE(((x)&(~0x20)),'A','F') ? (((x)&(~0x20)) - 'A' + 0xa) : (INRANGE(x,'0','9') ? (x) - '0' : 0))
+#define getByte( x )    (getBits((x)[0]) << 4 | getBits((x)[1]))
 
 #pragma region DirectX
 
@@ -71,12 +76,28 @@ void gVars::Initialize()
 	hCurrentProcess = GetCurrentProcess();
 	dwBase = reinterpret_cast<DWORD>(nMemory::GetModuleHandleSafe(L"UNDERTALE.exe"));
 	dwUserCmd = (DWORD)nMemory::ReadPointerPath(dwBase + nMemory::dwCommandOffset, { 0x0, 0x0, 0x44, 0x10, 0x364 }) - 0x30;
-	dwRoom = dwUserCmd + nMemory::dwRoomNumberOffset;
+	dwChangeRoomFn = nMemory::FindPattern("UNDERTALE.exe", "\x89\x35\x00\x00\x00\x00\x7D\x0B", "xx????xx"); //mov UNDERTALE.exe+ptr, esi
 }
 
 CUserCmd* gVars::GetCmd()
 {
 	return reinterpret_cast<CUserCmd*>(dwUserCmd);
+}
+
+int* gVars::GetRoomPointer()
+{
+	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
+}
+
+void gVars::SetRoom(DWORD nRoom)
+{
+	DWORD mem = dwChangeRoomFn;
+
+	__asm {
+		push nRoom //push nRoom onto the stack
+		pop esi //esi is now nRoom
+		mov mem, esi //move esi to mem
+	}
 }
 
 DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)
@@ -105,6 +126,7 @@ HMODULE nMemory::GetModuleHandleSafe(const wchar_t* pszModuleName)
 
 #pragma endregion
 
+#pragma region Memory and Stuff
 std::string DecToHex(int v)
 {
 	std::stringstream stream;
@@ -113,3 +135,47 @@ std::string DecToHex(int v)
 
 	return result;
 }
+
+MODULEINFO GetModuleInfo(const char* szModule)
+{
+	MODULEINFO modinfo = { 0 };
+	HMODULE hModule = nMemory::GetModuleHandleSafe(L"UNDERTALE.exe");
+	if (hModule == 0)
+		return modinfo;
+	GetModuleInformation(GetCurrentProcess(), hModule, &modinfo, sizeof(MODULEINFO));
+	return modinfo;
+}
+
+
+DWORD nMemory::FindPattern(const char* szModule, const char* pattern, const char* mask)
+{
+	//Get all module related information
+	MODULEINFO mInfo = GetModuleInfo(szModule);
+
+	//Assign our base and module size
+	DWORD base = (DWORD)mInfo.lpBaseOfDll;
+	DWORD size = (DWORD)mInfo.SizeOfImage;
+
+	//Get length for our mask, this will allow us to loop through our array
+	DWORD patternLength = (DWORD)strlen(mask);
+
+	for (DWORD i = 0; i < size - patternLength; i++)
+	{
+		bool found = true;
+		for (DWORD j = 0; j < patternLength; j++)
+		{
+			//if we have a ? in our mask then we have true by default,
+			//or if the bytes match then we keep searching until finding it or not
+			found &= mask[j] == '?' || pattern[j] == *(char*)(base + i + j);
+		}
+
+		//found = true, our entire pattern was found
+		if (found)
+		{
+			return base + i;
+		}
+	}
+	return NULL;
+}
+
+#pragma endregion
