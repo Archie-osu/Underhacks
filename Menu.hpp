@@ -15,16 +15,16 @@ enum Tabs_t
 
 namespace nMenu
 {
-	static bool bInitializedGraphics = false;
-	static bool bInitializedWindow = false;
-	static bool bOpen = true;
+	inline bool bInitializedGraphics = false;
+	inline bool bInitializedWindow = false;
+	inline bool bOpen = true;
 
-	static ImVec2 vMenuSize = ImVec2((float)500, (float)500);
+	static ImVec2 vMenuSize = ImVec2((float)350, (float)300);
 	static const char* szMenuName = "Underhacks - Main Window";
 	static ImGuiWindowFlags MenuWindowFlags = (ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse
 		| ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar);
 
-	static int nCurrentTab = TAB_PLAYER;
+	static int nCurrentTab = TAB_INFO;
 
 	void DrawMenu();
 	void Start(LPDIRECT3DDEVICE9 pDevice);

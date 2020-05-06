@@ -26,9 +26,6 @@ HRESULT APIENTRY nHooks::EndScene_Hook(LPDIRECT3DDEVICE9 pDevice)
 
 LRESULT __stdcall nHooks::WndProc_Hook(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (uMsg == WM_KEYDOWN && wParam == 0x2D) //Insert is pressed
-		nMenu::bOpen = !nMenu::bOpen;
-
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		return true;
 

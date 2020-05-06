@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <d3d9.h>
 #include "HookBase.hpp"
+#include <sstream>
+#include <vector>
 
 namespace nDX //These functions should not be touched - they're only used by the DirectX library I'm using
 {
@@ -15,14 +17,6 @@ namespace nDX //These functions should not be touched - they're only used by the
 	HWND GetProcessWindow();
 
 	bool GetD3D9Device(void** pTable, size_t Size);
-}
-
-namespace gVars
-{
-	inline HANDLE hCurrentProcess;
-	inline HMODULE dwBase;
-
-	void Initialize();
 }
 
 struct CUserCmd
@@ -42,11 +36,27 @@ struct CUserCmd
 	double m_nHealth; //Current Health
 };
 
+
+namespace gVars
+{
+	inline HANDLE hCurrentProcess;
+	inline DWORD dwBase;
+	inline DWORD dwUserCmd;
+	inline DWORD dwRoom;
+
+	void Initialize();
+	CUserCmd* GetCmd();
+}
+
+std::string DecToHex(int v);
+
 namespace nMemory //Every function related to Memory
 {
-	constexpr DWORD dwCommandInterface	= 0x3F9F44; //base of the current command
-	constexpr DWORD dwRoomNumberOffset	= 0x618EA0; //used only for Room Number, more investigation has to be done
+	inline DWORD dwCommandOffset		= 0x3F9F44;
+	inline DWORD dwRoomNumberOffset	= 0x618EA0; //used only for Room Number, more investigation has to be done
 	//There may be some useful values around there in memory.
+
+	DWORD* ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers);
 
 	HMODULE GetModuleHandleSafe(const wchar_t* pszModuleName);
 }

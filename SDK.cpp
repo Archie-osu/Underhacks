@@ -66,13 +66,29 @@ bool nDX::GetD3D9Device(void** pTable, size_t Size)
 
 #pragma region Game
 
-
-#pragma endregion
-
 void gVars::Initialize()
 {
 	hCurrentProcess = GetCurrentProcess();
-	dwBase = nMemory::GetModuleHandleSafe(L"UNDERTALE.exe");
+	dwBase = reinterpret_cast<DWORD>(nMemory::GetModuleHandleSafe(L"UNDERTALE.exe"));
+	dwUserCmd = (DWORD)nMemory::ReadPointerPath(dwBase + nMemory::dwCommandOffset, { 0x0, 0x0, 0x44, 0x10, 0x364 }) - 0x30;
+	dwRoom = dwUserCmd + nMemory::dwRoomNumberOffset;
+}
+
+CUserCmd* gVars::GetCmd()
+{
+	return reinterpret_cast<CUserCmd*>(dwUserCmd);
+}
+
+DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)
+{
+	DWORD* pTraversal = (DWORD*)dwBase;
+
+	for (DWORD offset : vPointers)
+	{
+		pTraversal = reinterpret_cast<DWORD*>(*(pTraversal + (offset / sizeof(DWORD))));
+	}
+
+	return (DWORD*)pTraversal;
 }
 
 HMODULE nMemory::GetModuleHandleSafe(const wchar_t* pszModuleName)
@@ -85,4 +101,15 @@ HMODULE nMemory::GetModuleHandleSafe(const wchar_t* pszModuleName)
 	} while (hmModuleHandle == nullptr);
 
 	return hmModuleHandle;
+}
+
+#pragma endregion
+
+std::string DecToHex(int v)
+{
+	std::stringstream stream;
+	stream << std::hex << v;
+	std::string result(stream.str());
+
+	return result;
 }
