@@ -39,18 +39,48 @@ struct CUserCmd
 	double m_nHealth; //Current Health
 };
 
+struct vec4
+{
+	float x, y, z, w;
+};
+
+using matrix44 = float[4][4];
+
+
+struct WeirdStuff
+{
+	union {
+		__int32 v32;
+		__int64 v64;
+		double    val;                        // value when real
+		union {
+			union {
+				vec4* pVec4;
+				matrix44* pMatrix44;
+				void* ptr;
+			};
+		};
+	};
+	int        flags;                            // use for flags (Hijack for Enumerable and Configurable bits in JavaScript)  (Note: probably will need a visibility as well, to support private variables that are promoted to object scope, but should not be seen (is that just not enumerated????) )
+	int        kind;                            // kind of value
+
+};
+
 namespace gVars
 {
+
 	inline HANDLE hCurrentProcess;
 	inline DWORD dwBase;
 	inline DWORD dwUserCmd;
-	inline DWORD dwChangeRoomFn;
+	inline DWORD dwRoom_GoTo;
+	inline DWORD dwRoom_Prev;
 
 	void Initialize();
 
 	CUserCmd* GetCmd();
 	int* GetRoomPointer();
-	void SetRoom(DWORD nRoom); //Rebuilt function from GameMakers' room_goto(int)
+	void GoToRoom(int nRoom); //NOT the room_goto function! Just a proxy for room_goto_previous
+	void GoToPreviousRoom();
 }
 
 std::string DecToHex(int v);

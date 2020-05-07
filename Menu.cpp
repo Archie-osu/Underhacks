@@ -9,6 +9,72 @@ void nMenu::DrawMenu()
 			ImGui::SetWindowPos(ImVec2(10, 10));
 			ImGui::SetWindowSize(vMenuSize);
 
+			ImGuiStyle& Style = ImGui::GetStyle();
+			Style.FrameBorderSize = 1.0f;
+			Style.WindowPadding = ImVec2(7.0f, 4.0f);
+			Style.FramePadding = ImVec2(6.0f, 2.0f);
+			Style.ItemSpacing = ImVec2(8.0f, 6.0f);
+			Style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+			Style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+			Style.WindowBorderSize = 1.0f;
+			Style.WindowRounding = 6.0f;
+			Style.ChildRounding = 1.0f;
+			Style.FrameRounding = 6.0f;
+			Style.GrabRounding = 6.0f;
+			Style.PopupRounding = 1.0f;
+			Style.TabRounding = 5.0f;
+			Style.GrabMinSize = 7.0f;
+
+			ImVec4* colors = ImGui::GetStyle().Colors;
+			colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+			colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+			colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.95f);
+			colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+			colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
+			colors[ImGuiCol_Border] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+			colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+			colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.92f);
+			colors[ImGuiCol_FrameBgHovered] = ImVec4(0.14f, 0.06f, 0.31f, 0.40f);
+			colors[ImGuiCol_FrameBgActive] = ImVec4(0.40f, 0.15f, 0.49f, 0.67f);
+			colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.71f);
+			colors[ImGuiCol_TitleBgActive] = ImVec4(0.52f, 0.00f, 0.00f, 1.00f);
+			colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
+			colors[ImGuiCol_MenuBarBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);
+			colors[ImGuiCol_ScrollbarBg] = ImVec4(0.04f, 0.02f, 0.02f, 0.53f);
+			colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.34f, 0.31f, 0.31f, 1.00f);
+			colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+			colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
+			colors[ImGuiCol_CheckMark] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+			colors[ImGuiCol_SliderGrab] = ImVec4(0.98f, 0.00f, 0.00f, 0.71f);
+			colors[ImGuiCol_SliderGrabActive] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
+			colors[ImGuiCol_Button] = ImVec4(0.71f, 0.00f, 0.00f, 0.39f);
+			colors[ImGuiCol_ButtonHovered] = ImVec4(0.36f, 0.00f, 0.22f, 0.46f);
+			colors[ImGuiCol_ButtonActive] = ImVec4(0.23f, 0.00f, 0.29f, 1.00f);
+			colors[ImGuiCol_Header] = ImVec4(0.23f, 0.59f, 0.98f, 0.31f);
+			colors[ImGuiCol_HeaderHovered] = ImVec4(0.26f, 0.00f, 0.31f, 1.00f);
+			colors[ImGuiCol_HeaderActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+			colors[ImGuiCol_Separator] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+			colors[ImGuiCol_SeparatorHovered] = ImVec4(0.10f, 0.40f, 0.75f, 0.78f);
+			colors[ImGuiCol_SeparatorActive] = ImVec4(0.10f, 0.40f, 0.75f, 1.00f);
+			colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
+			colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+			colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+			colors[ImGuiCol_Tab] = ImVec4(0.63f, 0.00f, 0.00f, 0.86f);
+			colors[ImGuiCol_TabHovered] = ImVec4(0.00f, 0.59f, 0.98f, 0.80f);
+			colors[ImGuiCol_TabActive] = ImVec4(0.04f, 0.19f, 0.54f, 1.00f);
+			colors[ImGuiCol_TabUnfocused] = ImVec4(0.07f, 0.10f, 0.15f, 0.97f);
+			colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.26f, 0.42f, 1.00f);
+			colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
+			colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
+			colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+			colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+			colors[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
+			colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+			colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+			colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+			colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.34f);
+			colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+
 			bInitializedWindow = true;
 		}
 
@@ -31,12 +97,11 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.1.0 dev");
+			ImGui::Text("Underhacks version: 1.1.0 Stable");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
 			ImGui::Text(std::string("Static Room: " + std::to_string(*gVars::GetRoomPointer())).c_str());
-			ImGui::Text(std::string("CUserCmd Room: " + std::to_string(gVars::GetCmd()->m_nRoom)).c_str());
-			ImGui::Text(std::string("mov [UNDERTALE.exe+618A0,esi]: " + DecToHex(gVars::dwChangeRoomFn)).c_str());
+			ImGui::Text(std::string("GoToRoom Function: " + DecToHex(gVars::dwRoom_GoTo)).c_str());
 
 			if (ImGui::Button("Recalculate Addresses", ImVec2(175, 20)))
 				gVars::Initialize();
@@ -50,7 +115,8 @@ void nMenu::DrawMenu()
 			ImGui::SliderDouble("Health", &gVars::GetCmd()->m_nHealth, 0, gVars::GetCmd()->m_nMaxHealth, "%.0f");
 			ImGui::SliderDouble("Max Health", &gVars::GetCmd()->m_nMaxHealth, gVars::GetCmd()->m_nHealth, 99.00, "%.0f");
 			ImGui::SliderDouble("LOVE", &gVars::GetCmd()->m_nLOVE, 0.0, 20.0, "%.0f");
-			ImGui::SliderDouble("EXP", &gVars::GetCmd()->m_nEXP, 0.0, 50000.0, "%.0f", 10.0f);
+			ImGui::SliderDouble("EXP", &gVars::GetCmd()->m_nEXP, 0.0, 50000.0, "%.0f", 6.0f);
+			ImGui::SliderDouble("Gold", &gVars::GetCmd()->m_nGold, 0.0, 9999.0, "%.0f", 4.0f);
 
 			break;
 		case TAB_WORLD:
@@ -58,8 +124,14 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			if (ImGui::Button("why tf does this not work", ImVec2(200, 20)))
-				gVars::SetRoom(0x108);
+			if (ImGui::Button("Go to previous room", ImVec2(200, 20)))
+				gVars::GoToPreviousRoom();
+
+			ImGui::Combo("Room to warp to: ", &nRoomToWarp, szRooms, 384);
+
+			if (ImGui::Button("Warp!", ImVec2(200, 20))) {
+				gVars::GoToRoom(nRoomToWarp); //A little hack-around :')
+			}
 
 			break;
 		}

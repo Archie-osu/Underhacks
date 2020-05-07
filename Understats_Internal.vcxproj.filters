@@ -66,6 +66,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Resource Files\Understats\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu_Rooms.cpp">
+      <Filter>Resource Files\Understats\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HookBase.hpp">

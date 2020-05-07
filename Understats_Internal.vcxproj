@@ -156,6 +156,7 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Menu_Rooms.cpp" />
     <ClCompile Include="SDK.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -76,7 +76,8 @@ void gVars::Initialize()
 	hCurrentProcess = GetCurrentProcess();
 	dwBase = reinterpret_cast<DWORD>(nMemory::GetModuleHandleSafe(L"UNDERTALE.exe"));
 	dwUserCmd = (DWORD)nMemory::ReadPointerPath(dwBase + nMemory::dwCommandOffset, { 0x0, 0x0, 0x44, 0x10, 0x364 }) - 0x30;
-	dwChangeRoomFn = nMemory::FindPattern("UNDERTALE.exe", "\x89\x35\x00\x00\x00\x00\x7D\x0B", "xx????xx"); //mov UNDERTALE.exe+ptr, esi
+	dwRoom_GoTo = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x8B\x4C\x24\x14\x50", "x????xxxxx");
+	dwRoom_Prev = nMemory::FindPattern("UNDERTALE.exe", "\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x3B\xC8\x75\x1A", "x????xx????xxxx");
 }
 
 CUserCmd* gVars::GetCmd()
@@ -89,15 +90,20 @@ int* gVars::GetRoomPointer()
 	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
 }
 
-void gVars::SetRoom(DWORD nRoom)
+void gVars::GoToPreviousRoom()
 {
-	DWORD mem = dwChangeRoomFn;
+	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(dwRoom_Prev);
 
-	__asm {
-		push nRoom //push nRoom onto the stack
-		pop esi //esi is now nRoom
-		mov mem, esi //move esi to mem
-	}
+	room_prev();
+}
+
+void gVars::GoToRoom(int nRoom)
+{
+	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(dwRoom_Prev); //Get the function for room_goto_previous
+
+	*GetRoomPointer() = nRoom + 1; //Overwrite our True Room Number with our desired room + one
+
+	room_prev(); //Decrement our true room number by one and travel to that room.
 }
 
 DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)
