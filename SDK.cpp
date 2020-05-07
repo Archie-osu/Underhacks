@@ -78,28 +78,36 @@ void gVars::Initialize()
 	dwUserCmd = (DWORD)nMemory::ReadPointerPath(dwBase + nMemory::dwCommandOffset, { 0x0, 0x0, 0x44, 0x10, 0x364 }) - 0x30;
 	dwRoom_GoTo = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x8B\x4C\x24\x14\x50", "x????xxxxx");
 	dwRoom_Prev = nMemory::FindPattern("UNDERTALE.exe", "\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x3B\xC8\x75\x1A", "x????xx????xxxx");
+	dwRoom_Restart = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x50\xA3\x00\x00\x00\x00", "x????xx????");
 }
 
-CUserCmd* gVars::GetCmd()
+CUserCmd* nFuncs::GetCmd()
 {
-	return reinterpret_cast<CUserCmd*>(dwUserCmd);
+	return reinterpret_cast<CUserCmd*>(gVars::dwUserCmd);
 }
 
-int* gVars::GetRoomPointer()
+int* nFuncs::GetRoomPointer()
 {
 	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
 }
 
-void gVars::GoToPreviousRoom()
+void nFuncs::room_goto_previous()
 {
-	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(dwRoom_Prev);
+	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev);
 
 	room_prev();
 }
 
-void gVars::GoToRoom(int nRoom)
+void nFuncs::room_restart()
 {
-	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(dwRoom_Prev); //Get the function for room_goto_previous
+	static auto room_restart = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Restart); //Get the function for room_goto_previous
+
+	room_restart();
+}
+
+void nFuncs::room_goto_proxy(int nRoom)
+{
+	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev); //Get the function for room_goto_previous
 
 	*GetRoomPointer() = nRoom + 1; //Overwrite our True Room Number with our desired room + one
 

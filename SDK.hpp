@@ -66,21 +66,26 @@ struct WeirdStuff
 
 };
 
+namespace nFuncs
+{
+	CUserCmd* GetCmd();
+	int* GetRoomPointer();
+
+	void room_goto_proxy(int nRoom); //NOT the room_goto function! Just a proxy for room_goto_previous
+	void room_goto_previous();
+	void room_restart();
+}
+
 namespace gVars
 {
-
 	inline HANDLE hCurrentProcess;
 	inline DWORD dwBase;
 	inline DWORD dwUserCmd;
 	inline DWORD dwRoom_GoTo;
 	inline DWORD dwRoom_Prev;
+	inline DWORD dwRoom_Restart;
 
 	void Initialize();
-
-	CUserCmd* GetCmd();
-	int* GetRoomPointer();
-	void GoToRoom(int nRoom); //NOT the room_goto function! Just a proxy for room_goto_previous
-	void GoToPreviousRoom();
 }
 
 std::string DecToHex(int v);

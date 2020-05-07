@@ -97,10 +97,10 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.1.0 Stable");
+			ImGui::Text("Underhacks version: 1.1.1 Stable");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
-			ImGui::Text(std::string("Static Room: " + std::to_string(*gVars::GetRoomPointer())).c_str());
+			ImGui::Text(std::string("Current Room: " + std::to_string(*nFuncs::GetRoomPointer())).c_str());
 			ImGui::Text(std::string("GoToRoom Function: " + DecToHex(gVars::dwRoom_GoTo)).c_str());
 
 			if (ImGui::Button("Recalculate Addresses", ImVec2(175, 20)))
@@ -112,11 +112,11 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			ImGui::SliderDouble("Health", &gVars::GetCmd()->m_nHealth, 0, gVars::GetCmd()->m_nMaxHealth, "%.0f");
-			ImGui::SliderDouble("Max Health", &gVars::GetCmd()->m_nMaxHealth, gVars::GetCmd()->m_nHealth, 99.00, "%.0f");
-			ImGui::SliderDouble("LOVE", &gVars::GetCmd()->m_nLOVE, 0.0, 20.0, "%.0f");
-			ImGui::SliderDouble("EXP", &gVars::GetCmd()->m_nEXP, 0.0, 50000.0, "%.0f", 6.0f);
-			ImGui::SliderDouble("Gold", &gVars::GetCmd()->m_nGold, 0.0, 9999.0, "%.0f", 4.0f);
+			ImGui::SliderDouble("Health", &nFuncs::GetCmd()->m_nHealth, 0, nFuncs::GetCmd()->m_nMaxHealth, "%.0f");
+			ImGui::SliderDouble("Max Health", &nFuncs::GetCmd()->m_nMaxHealth, nFuncs::GetCmd()->m_nHealth, 99.00, "%.0f");
+			ImGui::SliderDouble("LOVE", &nFuncs::GetCmd()->m_nLOVE, 0.0, 20.0, "%.0f");
+			ImGui::SliderDouble("EXP", &nFuncs::GetCmd()->m_nEXP, 0.0, 50000.0, "%.0f", 2.0f);
+			ImGui::SliderDouble("Gold", &nFuncs::GetCmd()->m_nGold, 0.0, 9999.0, "%.0f", 2.0f);
 
 			break;
 		case TAB_WORLD:
@@ -125,12 +125,17 @@ void nMenu::DrawMenu()
 			ImGui::NewLine();
 
 			if (ImGui::Button("Go to previous room", ImVec2(200, 20)))
-				gVars::GoToPreviousRoom();
+				nFuncs::room_goto_previous();
 
-			ImGui::Combo("Room to warp to: ", &nRoomToWarp, szRooms, 384);
+			ImGui::Combo("Desired room", &nRoomToWarp, szRooms, 334);
 
-			if (ImGui::Button("Warp!", ImVec2(200, 20))) {
-				gVars::GoToRoom(nRoomToWarp); //A little hack-around :')
+			if (ImGui::Button("Warp!", ImVec2(75, 20))) {
+				nFuncs::room_goto_proxy(nRoomToWarp);
+				nFuncs::room_restart();
+			}
+
+			if (ImGui::Button("Restart Room", ImVec2(200, 20))) {
+				nFuncs::room_restart();
 			}
 
 			break;
