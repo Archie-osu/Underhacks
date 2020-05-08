@@ -60,6 +60,7 @@ const char* nMenu::szRooms[]{  //All the rooms - ToDo: Find this in memory so I 
 	, "room_tundra_spaghetti"
 	, "room_tundra_snowpuzz"
 	, "room_tundra_xoxosmall"
+	, "room_tundra_xoxopuzz"
 	, "room_tundra_randoblock"
 	, "room_tundra_lesserdog"
 	, "room_tundra_icehole"

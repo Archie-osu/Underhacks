@@ -23,47 +23,22 @@ namespace nDX //These functions should not be touched - they're only used by the
 struct CUserCmd
 {
 	double m_nIsInFight; //Set to 0 if we are not fighting, 1 if we are.
-	UCHAR pad0[0xC8];
+	UCHAR pad0[0x16];
+	double m_Interact; //global.interact?
+	UCHAR pad1[0xA2];
 	double m_nKills; //Current amount of monsters killed
-	UCHAR pad1[0x238];
+	UCHAR pad2[0x238];
 	double m_nRoom; //Backup Room, used to return the player to a valid room after a fight.
-	UCHAR pad2[0xF8];
+	UCHAR pad3[0xF8];
 	double m_nLOVE; //Level of Violence
-	UCHAR pad3[0x4];
-	double m_nEXP; //Execution Points
 	UCHAR pad4[0x4];
+	double m_nEXP; //Execution Points
+	UCHAR pad5[0x4];
 	double m_nGold; //Gold
-	UCHAR pad5[0xB8];
+	UCHAR pad6[0xB8];
 	double m_nMaxHealth; //Maximum Health
-	UCHAR pad6[0x8];
+	UCHAR pad7[0x8];
 	double m_nHealth; //Current Health
-};
-
-struct vec4
-{
-	float x, y, z, w;
-};
-
-using matrix44 = float[4][4];
-
-
-struct WeirdStuff
-{
-	union {
-		__int32 v32;
-		__int64 v64;
-		double    val;                        // value when real
-		union {
-			union {
-				vec4* pVec4;
-				matrix44* pMatrix44;
-				void* ptr;
-			};
-		};
-	};
-	int        flags;                            // use for flags (Hijack for Enumerable and Configurable bits in JavaScript)  (Note: probably will need a visibility as well, to support private variables that are promoted to object scope, but should not be seen (is that just not enumerated????) )
-	int        kind;                            // kind of value
-
 };
 
 namespace nFuncs
@@ -71,18 +46,24 @@ namespace nFuncs
 	CUserCmd* GetCmd();
 	int* GetRoomPointer();
 
-	void room_goto_proxy(int nRoom); //NOT the room_goto function! Just a proxy for room_goto_previous
-	void room_goto_previous();
+	void room_goto(int nRoom); //A little hack-around for the teleportation
+	int* room_goto_previous();
+	int* room_goto_next();
 	void room_restart();
+
 }
 
 namespace gVars
 {
-	inline HANDLE hCurrentProcess;
+	inline int nTeleportsLeft;
+	inline int nLastRequested;
+
 	inline DWORD dwBase;
 	inline DWORD dwUserCmd;
+	inline DWORD dwGameLoop;
 	inline DWORD dwRoom_GoTo;
 	inline DWORD dwRoom_Prev;
+	inline DWORD dwRoom_Next;
 	inline DWORD dwRoom_Restart;
 
 	void Initialize();
@@ -94,6 +75,7 @@ namespace nMemory //Every function related to Memory
 {
 	inline DWORD dwCommandOffset		= 0x3F9F44;
 	inline DWORD dwRoomNumberPtr		= 0xA18EA0; //Pointer to a 4byte Room Number value. Separate from CUserCmd.
+	inline DWORD unknown						= 0x1A2E3AA0;
 
 	DWORD* ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers);
 
@@ -101,3 +83,4 @@ namespace nMemory //Every function related to Memory
 
 	DWORD FindPattern(const char* szModule, const char* pattern, const char* mask);
 }
+

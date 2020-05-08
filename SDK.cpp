@@ -1,5 +1,6 @@
 #include "SDK.hpp"
 #include <Psapi.h>
+#pragma warning( disable : 4731 ) //WARNINGS BEGONE
 #define INRANGE(x,a,b)    ((x) >= (a) && (x) <= (b))
 #define INRANGE(x,a,b)    ((x) >= (a) && (x) <= (b))
 #define getBits( x )    (INRANGE(((x)&(~0x20)),'A','F') ? (((x)&(~0x20)) - 'A' + 0xa) : (INRANGE(x,'0','9') ? (x) - '0' : 0))
@@ -73,12 +74,13 @@ bool nDX::GetD3D9Device(void** pTable, size_t Size)
 
 void gVars::Initialize()
 {
-	hCurrentProcess = GetCurrentProcess();
 	dwBase = reinterpret_cast<DWORD>(nMemory::GetModuleHandleSafe(L"UNDERTALE.exe"));
 	dwUserCmd = (DWORD)nMemory::ReadPointerPath(dwBase + nMemory::dwCommandOffset, { 0x0, 0x0, 0x44, 0x10, 0x364 }) - 0x30;
-	dwRoom_GoTo = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x8B\x4C\x24\x14\x50", "x????xxxxx");
-	dwRoom_Prev = nMemory::FindPattern("UNDERTALE.exe", "\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x3B\xC8\x75\x1A", "x????xx????xxxx");
-	dwRoom_Restart = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x50\xA3\x00\x00\x00\x00", "x????xx????");
+	dwRoom_GoTo = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x8B\x4C\x24\x14\x50", "x????xxxxx"); //room_goto
+	dwRoom_Prev = nMemory::FindPattern("UNDERTALE.exe", "\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x3B\xC8\x75\x1A", "x????xx????xxxx"); //room_goto_previous
+	dwRoom_Restart = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x50\xA3\x00\x00\x00\x00", "x????xx????"); //room_restart
+	dwGameLoop = nMemory::FindPattern("UNDERTALE.exe", "\x83\xEC\x10\x8B\x44\x24\x1C", "xxxxxxx"); //main game loop, responsible for setting up the stack
+	dwRoom_Next = dwRoom_Prev + 0x50;
 }
 
 CUserCmd* nFuncs::GetCmd()
@@ -91,11 +93,18 @@ int* nFuncs::GetRoomPointer()
 	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
 }
 
-void nFuncs::room_goto_previous()
+int* nFuncs::room_goto_previous()
 {
 	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev);
 
-	room_prev();
+	return room_prev();
+}
+
+int* nFuncs::room_goto_next()
+{
+	static auto room_next = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Next);
+
+	return room_next();
 }
 
 void nFuncs::room_restart()
@@ -105,13 +114,24 @@ void nFuncs::room_restart()
 	room_restart();
 }
 
-void nFuncs::room_goto_proxy(int nRoom)
+void nFuncs::room_goto(int nRoom)
 {
-	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev); //Get the function for room_goto_previous
+	//You can only call room_goto_next() / room_goto_previous() once a frame, so yeah.. that wont work
+	int nCurRoom = *GetRoomPointer();
+	
+	if (nRoom > nCurRoom) {
+		room_goto_next();
+		gVars::nTeleportsLeft = nRoom - (nCurRoom - 1);
+	}
+	else if (nRoom < nCurRoom) {
+		room_goto_previous();
+		gVars::nTeleportsLeft = (nCurRoom - 1) - nRoom;
+	}
 
-	*GetRoomPointer() = nRoom + 1; //Overwrite our True Room Number with our desired room + one
+	if (nFuncs::GetCmd()->m_Interact == 1)
+		nFuncs::GetCmd()->m_Interact = 0; //Movement Fix
 
-	room_prev(); //Decrement our true room number by one and travel to that room.
+	gVars::nLastRequested = nRoom;
 }
 
 DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)

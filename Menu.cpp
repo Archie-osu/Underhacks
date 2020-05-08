@@ -97,11 +97,12 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.1.1 Stable");
+			ImGui::Text("Underhacks version: 1.2.0 Dev");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
 			ImGui::Text(std::string("Current Room: " + std::to_string(*nFuncs::GetRoomPointer())).c_str());
 			ImGui::Text(std::string("GoToRoom Function: " + DecToHex(gVars::dwRoom_GoTo)).c_str());
+			ImGui::Text(std::string("global.interact: " + std::to_string(nFuncs::GetCmd()->m_Interact)).c_str());
 
 			if (ImGui::Button("Recalculate Addresses", ImVec2(175, 20)))
 				gVars::Initialize();
@@ -124,17 +125,23 @@ void nMenu::DrawMenu()
 
 			ImGui::NewLine();
 
-			if (ImGui::Button("Go to previous room", ImVec2(200, 20)))
+			if (ImGui::Button("Previous Room", ImVec2(110, 20)))
 				nFuncs::room_goto_previous();
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Next Room", ImVec2(75, 20)))
+				nFuncs::room_goto_next();
 
 			ImGui::Combo("Desired room", &nRoomToWarp, szRooms, 334);
 
 			if (ImGui::Button("Warp!", ImVec2(75, 20))) {
-				nFuncs::room_goto_proxy(nRoomToWarp);
-				nFuncs::room_restart();
+				nFuncs::room_goto(nRoomToWarp);
 			}
 
-			if (ImGui::Button("Restart Room", ImVec2(200, 20))) {
+			ImGui::SameLine();
+
+			if (ImGui::Button("Restart Room", ImVec2(100, 20))) {
 				nFuncs::room_restart();
 			}
 
@@ -164,6 +171,9 @@ void nMenu::Start(LPDIRECT3DDEVICE9 pDevice)
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	if (gVars::nTeleportsLeft != 0)
+		nFuncs::room_goto(gVars::nLastRequested);
 
 	DrawMenu();
 

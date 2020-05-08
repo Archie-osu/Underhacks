@@ -18,7 +18,6 @@ namespace nMenu
 	extern const char* szRooms[];
 	inline int nRoomToWarp = 0;
 
-
 	inline bool bInitializedGraphics = false;
 	inline bool bInitializedWindow = false;
 	inline bool bOpen = true;

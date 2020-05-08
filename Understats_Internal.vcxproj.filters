@@ -16,9 +16,6 @@
     <Filter Include="Resource Files\Hook Base">
       <UniqueIdentifier>{fcbfc957-794c-4a1d-a901-e7b87ae57105}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK">
-      <UniqueIdentifier>{11779573-69d3-4dd6-a32d-d1b4edeb8534}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Understats">
       <UniqueIdentifier>{9c03b52a-acae-4cdf-a218-32cde03f200b}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,9 @@
     <Filter Include="Resource Files\Understats\Menu">
       <UniqueIdentifier>{1c267b8b-f30c-4fcd-970b-a9174152bc65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Understats\SDK">
+      <UniqueIdentifier>{11779573-69d3-4dd6-a32d-d1b4edeb8534}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp">
@@ -40,7 +40,7 @@
       <Filter>Resource Files\Hook Base</Filter>
     </ClCompile>
     <ClCompile Include="SDK.cpp">
-      <Filter>Resource Files\SDK</Filter>
+      <Filter>Resource Files\Understats\SDK</Filter>
     </ClCompile>
     <ClCompile Include="Hooks.cpp">
       <Filter>Resource Files\Understats\Hooks</Filter>
@@ -75,7 +75,7 @@
       <Filter>Resource Files\Hook Base</Filter>
     </ClInclude>
     <ClInclude Include="SDK.hpp">
-      <Filter>Resource Files\SDK</Filter>
+      <Filter>Resource Files\Understats\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Hooks.hpp">
       <Filter>Resource Files\Understats\Hooks</Filter>
