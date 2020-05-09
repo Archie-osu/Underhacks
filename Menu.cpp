@@ -133,6 +133,12 @@ void nMenu::DrawMenu()
 			if (ImGui::Button("Next Room", ImVec2(75, 20)))
 				nFuncs::room_goto_next();
 
+			ImGui::SameLine();
+
+			if (ImGui::Button("Restart Room", ImVec2(100, 20))) {
+				nFuncs::room_restart();
+			}
+
 			static const char* szTeleports[] { "Normal", "Meme" };
 
 			ImGui::PushItemWidth(vMenuSize.x / 4);
@@ -150,9 +156,10 @@ void nMenu::DrawMenu()
 
 			ImGui::SameLine();
 
-			if (ImGui::Button("Restart Room", ImVec2(100, 20))) {
-				nFuncs::room_restart();
+			if (ImGui::Button("Fix Movement", ImVec2(100, 20))) {
+				nFuncs::GetCmd()->m_Interact = 0;
 			}
+
 
 			break;
 		}
