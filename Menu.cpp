@@ -94,10 +94,10 @@ void nMenu::DrawMenu()
 		{
 		case TAB_INFO:
 			ImGui::Text("Info");
-
+			
 			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.2.0 Dev");
+			ImGui::Text("Underhacks version: 1.2.1");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
 			ImGui::Text(std::string("Current Room: " + std::to_string(*nFuncs::GetRoomPointer())).c_str());
@@ -133,10 +133,19 @@ void nMenu::DrawMenu()
 			if (ImGui::Button("Next Room", ImVec2(75, 20)))
 				nFuncs::room_goto_next();
 
-			ImGui::Combo("Desired room", &nRoomToWarp, szRooms, 334);
+			static const char* szTeleports[] { "Normal", "Meme" };
+
+			ImGui::PushItemWidth(vMenuSize.x / 4);
+			ImGui::Combo("Teleportation Method", &nTeleportMethod, szTeleports, IM_ARRAYSIZE(szTeleports));
+			ImGui::PopItemWidth();
+
+			ImGui::Combo("Desired room", &nRoomToWarp, szRooms, 335);
 
 			if (ImGui::Button("Warp!", ImVec2(75, 20))) {
-				nFuncs::room_goto(nRoomToWarp);
+				if (nTeleportMethod == 0)
+					nFuncs::room_goto(static_cast<DWORD>(nRoomToWarp));
+				else
+					nFuncs::room_goto_meme(nRoomToWarp);
 			}
 
 			ImGui::SameLine();
@@ -168,12 +177,12 @@ void nMenu::Start(LPDIRECT3DDEVICE9 pDevice)
 	if (!bOpen)
 		return;
 
-	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplDX9_NewFrame(); 
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	if (gVars::nTeleportsLeft != 0)
-		nFuncs::room_goto(gVars::nLastRequested);
+	if (gVars::nTeleportsLeft != 0 && nTeleportMethod == 1)
+		nFuncs::room_goto_meme(gVars::nLastRequested);
 
 	DrawMenu();
 

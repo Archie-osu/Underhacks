@@ -9,8 +9,6 @@
 
 namespace nDX //These functions should not be touched - they're only used by the DirectX library I'm using
 {
-	typedef HRESULT(APIENTRY* tEndScene)(LPDIRECT3DDEVICE9 pDevice);
-
 	static HWND window;
 
 	BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam);
@@ -46,9 +44,11 @@ namespace nFuncs
 	CUserCmd* GetCmd();
 	int* GetRoomPointer();
 
-	void room_goto(int nRoom); //A little hack-around for the teleportation
-	int* room_goto_previous();
-	int* room_goto_next();
+	void room_goto(DWORD nRoom);
+	void room_goto_meme(int nRoomNumber);
+	void audio_stop_all();
+	void room_goto_previous();
+	void room_goto_next();
 	void room_restart();
 
 }
@@ -60,11 +60,12 @@ namespace gVars
 
 	inline DWORD dwBase;
 	inline DWORD dwUserCmd;
+	inline DWORD dwAudio_Stop_All;
 	inline DWORD dwGameLoop;
-	inline DWORD dwRoom_GoTo;
 	inline DWORD dwRoom_Prev;
 	inline DWORD dwRoom_Next;
 	inline DWORD dwRoom_Restart;
+	inline DWORD dwRoom_GoTo;
 
 	void Initialize();
 }
@@ -75,7 +76,6 @@ namespace nMemory //Every function related to Memory
 {
 	inline DWORD dwCommandOffset		= 0x3F9F44;
 	inline DWORD dwRoomNumberPtr		= 0xA18EA0; //Pointer to a 4byte Room Number value. Separate from CUserCmd.
-	inline DWORD unknown						= 0x1A2E3AA0;
 
 	DWORD* ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers);
 

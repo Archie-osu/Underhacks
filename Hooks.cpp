@@ -3,11 +3,11 @@
 #include "Menu.hpp"
 
 bool bInit;
-nDX::tEndScene original = nullptr;
+nHooks::tEndScene oEndScene = nullptr;
 LPDIRECT3DDEVICE9 pD3DDevice = nullptr;
-void* d3d9Device[119];
+void* pDevice[119];
 
-HRESULT APIENTRY nHooks::EndScene_Hook(LPDIRECT3DDEVICE9 pDevice)
+HRESULT APIENTRY nHooks::hkEndScene(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (bInit == false)
 	{
@@ -17,14 +17,14 @@ HRESULT APIENTRY nHooks::EndScene_Hook(LPDIRECT3DDEVICE9 pDevice)
 
 	pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0xFFFFFFFF);
 
-	long originalReturn = original(pDevice);
+	long originalReturn = oEndScene(pDevice);
 
 	nMenu::Start(pDevice);
 
 	return originalReturn;
 }
 
-LRESULT __stdcall nHooks::WndProc_Hook(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall nHooks::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		return true;
@@ -34,8 +34,8 @@ LRESULT __stdcall nHooks::WndProc_Hook(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 
 void nHooks::Initialize()
 {
-	if (nDX::GetD3D9Device(d3d9Device, sizeof(d3d9Device)))
-		original = (nDX::tEndScene)nHookBase::TrampHook((char*)d3d9Device[42], (char*)EndScene_Hook, 7);
+	if (nDX::GetD3D9Device(pDevice, sizeof(pDevice)))
+		oEndScene = (tEndScene)nHookBase::TrampHook((char*)pDevice[42], (char*)hkEndScene, 7);
 
-	windowProc = (WNDPROC)(SetWindowLongW(FindWindowA(0, "UNDERTALE"), GWLP_WNDPROC, (LONG_PTR)(&WndProc_Hook)));
+	windowProc = (WNDPROC)(SetWindowLongW(FindWindowA(0, "UNDERTALE"), GWLP_WNDPROC, (LONG_PTR)(&hkWndProc)));
 }

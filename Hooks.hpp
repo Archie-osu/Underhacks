@@ -3,9 +3,11 @@
 
 namespace nHooks
 {
-	HRESULT APIENTRY EndScene_Hook(LPDIRECT3DDEVICE9 pDevice);
+	typedef HRESULT(APIENTRY* tEndScene)(LPDIRECT3DDEVICE9 pDevice);
 
-	LRESULT __stdcall WndProc_Hook(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	HRESULT APIENTRY hkEndScene(LPDIRECT3DDEVICE9 pDevice);
+
+	LRESULT __stdcall hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	inline WNDPROC windowProc;
 

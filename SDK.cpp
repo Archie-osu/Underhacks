@@ -79,8 +79,9 @@ void gVars::Initialize()
 	dwRoom_GoTo = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x8B\x4C\x24\x14\x50", "x????xxxxx"); //room_goto
 	dwRoom_Prev = nMemory::FindPattern("UNDERTALE.exe", "\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x3B\xC8\x75\x1A", "x????xx????xxxx"); //room_goto_previous
 	dwRoom_Restart = nMemory::FindPattern("UNDERTALE.exe", "\xA1\x00\x00\x00\x00\x50\xA3\x00\x00\x00\x00", "x????xx????"); //room_restart
-	dwGameLoop = nMemory::FindPattern("UNDERTALE.exe", "\x83\xEC\x10\x8B\x44\x24\x1C", "xxxxxxx"); //main game loop, responsible for setting up the stack
+	dwAudio_Stop_All = nMemory::FindPattern("UNDERTALE.exe", "\x80\x3D\x00\x00\x00\x00\x00\x75\x08\x6A\x00", "xx?????xxxx");
 	dwRoom_Next = dwRoom_Prev + 0x50;
+	dwRoom_GoTo -= 0x3F240;
 }
 
 CUserCmd* nFuncs::GetCmd()
@@ -93,18 +94,22 @@ int* nFuncs::GetRoomPointer()
 	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
 }
 
-int* nFuncs::room_goto_previous()
+void nFuncs::room_goto_previous()
 {
 	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev);
 
-	return room_prev();
+	room_prev();
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
 }
 
-int* nFuncs::room_goto_next()
+void nFuncs::room_goto_next()
 {
 	static auto room_next = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Next);
 
-	return room_next();
+	room_next();
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
 }
 
 void nFuncs::room_restart()
@@ -112,13 +117,45 @@ void nFuncs::room_restart()
 	static auto room_restart = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Restart); //Get the function for room_goto_previous
 
 	room_restart();
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
 }
 
-void nFuncs::room_goto(int nRoom)
+void nFuncs::room_goto(DWORD nIndex)
 {
-	//You can only call room_goto_next() / room_goto_previous() once a frame, so yeah.. that wont work
+	DWORD dwFunction = gVars::dwRoom_GoTo;
+	static const char* szFuncName = "room_goto";
+
+	audio_stop_all();
+
+	unsigned int nStackBase;
+	unsigned int nStackPointer;
+
+	__asm
+	{
+		//Setup the variables for recovering the stack
+		mov nStackBase, ebp 
+		mov nStackPointer, esp 
+
+		//Prepare for function execution
+		mov eax, nIndex //move the desired room number onto the stack
+		mov esi, szFuncName //tell the game we're gonna call room_goto
+		push eax //push eax onto the stack, this'll serve as the first argument
+		call dwFunction //call the function
+
+		//Fix the stack
+		mov ebp, nStackBase
+		mov esp, nStackPointer
+	}
+
+	gVars::nTeleportsLeft = 0;
+	gVars::nLastRequested = nIndex;
+}
+
+void nFuncs::room_goto_meme(int nRoom)
+{
 	int nCurRoom = *GetRoomPointer();
-	
+
 	if (nRoom > nCurRoom) {
 		room_goto_next();
 		gVars::nTeleportsLeft = nRoom - (nCurRoom - 1);
@@ -128,10 +165,16 @@ void nFuncs::room_goto(int nRoom)
 		gVars::nTeleportsLeft = (nCurRoom - 1) - nRoom;
 	}
 
-	if (nFuncs::GetCmd()->m_Interact == 1)
-		nFuncs::GetCmd()->m_Interact = 0; //Movement Fix
+	nFuncs::GetCmd()->m_Interact = 0; //Movement Fix
 
 	gVars::nLastRequested = nRoom;
+}
+
+void nFuncs::audio_stop_all()
+{
+	static auto audio_stop_all = reinterpret_cast<int* (__cdecl*)()>(gVars::dwAudio_Stop_All);
+
+	audio_stop_all();
 }
 
 DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)
@@ -179,7 +222,6 @@ MODULEINFO GetModuleInfo(const char* szModule)
 	GetModuleInformation(GetCurrentProcess(), hModule, &modinfo, sizeof(MODULEINFO));
 	return modinfo;
 }
-
 
 DWORD nMemory::FindPattern(const char* szModule, const char* pattern, const char* mask)
 {
