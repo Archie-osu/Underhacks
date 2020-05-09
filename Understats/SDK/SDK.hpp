@@ -3,9 +3,10 @@
 #include <Windows.h>
 #include <d3d9.h>
 #include <TlHelp32.h>
-#include "HookBase.hpp"
-#include <sstream>
+#include "../../Hook Base/HookBase.hpp"
 #include <vector>
+#include <sstream>
+
 
 namespace nDX //These functions should not be touched - they're only used by the DirectX library I'm using
 {

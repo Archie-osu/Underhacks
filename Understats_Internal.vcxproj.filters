@@ -36,76 +36,76 @@
     <ClCompile Include="DllMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HookBase.cpp">
-      <Filter>Resource Files\Hook Base</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK.cpp">
+    <ClCompile Include="Understats\SDK\SDK.cpp">
       <Filter>Resource Files\Understats\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="Hooks.cpp">
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_demo.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_draw.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_impl_dx9.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_impl_win32.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_widgets.cpp">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Understats\Hooks\Hooks.cpp">
       <Filter>Resource Files\Understats\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="imgui.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_demo.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_draw.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_dx9.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_win32.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_widgets.cpp">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
+    <ClCompile Include="Understats\Menu\Menu.cpp">
       <Filter>Resource Files\Understats\Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Menu_Rooms.cpp">
+    <ClCompile Include="Understats\Menu\Menu_Rooms.cpp">
       <Filter>Resource Files\Understats\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook Base\HookBase.cpp">
+      <Filter>Resource Files\Hook Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HookBase.hpp">
-      <Filter>Resource Files\Hook Base</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK.hpp">
+    <ClInclude Include="Understats\SDK\SDK.hpp">
       <Filter>Resource Files\Understats\SDK</Filter>
     </ClInclude>
-    <ClInclude Include="Hooks.hpp">
+    <ClInclude Include="Understats\Menu\Dear ImGui\imconfig.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_impl_dx9.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_impl_win32.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_internal.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_rectpack.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_textedit.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_truetype.h">
+      <Filter>Resource Files\Understats\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Understats\Hooks\Hooks.hpp">
       <Filter>Resource Files\Understats\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="imconfig.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_dx9.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_win32.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_internal.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_rectpack.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_textedit.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_truetype.h">
-      <Filter>Resource Files\Understats\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.hpp">
+    <ClInclude Include="Understats\Menu\Menu.hpp">
       <Filter>Resource Files\Understats\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook Base\HookBase.hpp">
+      <Filter>Resource Files\Hook Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

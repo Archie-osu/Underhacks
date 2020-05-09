@@ -147,31 +147,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
-    <ClCompile Include="Hooks.cpp" />
-    <ClCompile Include="HookBase.cpp" />
-    <ClCompile Include="imgui.cpp" />
-    <ClCompile Include="imgui_demo.cpp" />
-    <ClCompile Include="imgui_draw.cpp" />
-    <ClCompile Include="imgui_impl_dx9.cpp" />
-    <ClCompile Include="imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui_widgets.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Menu_Rooms.cpp" />
-    <ClCompile Include="SDK.cpp" />
+    <ClCompile Include="Hook Base\HookBase.cpp" />
+    <ClCompile Include="Understats\Hooks\Hooks.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_demo.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_draw.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Understats\Menu\Dear ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Understats\Menu\Menu.cpp" />
+    <ClCompile Include="Understats\Menu\Menu_Rooms.cpp" />
+    <ClCompile Include="Understats\SDK\SDK.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hooks.hpp" />
-    <ClInclude Include="HookBase.hpp" />
-    <ClInclude Include="imconfig.h" />
-    <ClInclude Include="imgui.h" />
-    <ClInclude Include="imgui_impl_dx9.h" />
-    <ClInclude Include="imgui_impl_win32.h" />
-    <ClInclude Include="imgui_internal.h" />
-    <ClInclude Include="imstb_rectpack.h" />
-    <ClInclude Include="imstb_textedit.h" />
-    <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="Menu.hpp" />
-    <ClInclude Include="SDK.hpp" />
+    <ClInclude Include="Hook Base\HookBase.hpp" />
+    <ClInclude Include="Understats\Hooks\Hooks.hpp" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imconfig.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_impl_dx9.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imgui_internal.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_rectpack.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_textedit.h" />
+    <ClInclude Include="Understats\Menu\Dear ImGui\imstb_truetype.h" />
+    <ClInclude Include="Understats\Menu\Menu.hpp" />
+    <ClInclude Include="Understats\SDK\SDK.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

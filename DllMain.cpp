@@ -1,5 +1,5 @@
-#include "SDK.hpp"
-#include "Hooks.hpp"
+#include "Understats/Hooks/Hooks.hpp"
+#include "Understats/SDK/SDK.hpp"
 
 DWORD WINAPI Init(HMODULE hModule)
 {

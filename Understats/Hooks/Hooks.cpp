@@ -1,6 +1,6 @@
-#include "SDK.hpp"
+#include "../SDK/SDK.hpp"
 #include "Hooks.hpp"
-#include "Menu.hpp"
+#include "../Menu/Menu.hpp"
 
 bool bInit;
 nHooks::tEndScene oEndScene = nullptr;

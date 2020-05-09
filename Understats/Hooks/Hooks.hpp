@@ -1,5 +1,5 @@
 #pragma once
-#include "SDK.hpp"
+#include "../SDK/SDK.hpp"
 
 namespace nHooks
 {
