@@ -10,14 +10,20 @@ enum Tabs_t
 {
 	TAB_INFO,
 	TAB_PLAYER,
-	TAB_WORLD
+	TAB_GAME
 };
 
 namespace nMenu
 {
 	extern const char* szRooms[];
+
 	inline int nRoomToWarp = 0;
 	inline int nTeleportMethod = 0;
+
+	inline bool bFullScreen = 0;
+
+	inline int nUndertaleX = 1280;
+	inline int nUndertaleY = 720;
 
 	inline bool bInitializedGraphics = false;
 	inline bool bInitializedWindow = false;

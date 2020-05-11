@@ -82,6 +82,7 @@ void gVars::Initialize()
 	dwAudio_Stop_All = nMemory::FindPattern("UNDERTALE.exe", "\x80\x3D\x00\x00\x00\x00\x00\x75\x08\x6A\x00", "xx?????xxxx");
 	dwRoom_Next = dwRoom_Prev + 0x50;
 	dwRoom_GoTo -= 0x3F240;
+	dwWindow_SetFullScreen = dwRoom_GoTo - 0x778B0;
 }
 
 CUserCmd* nFuncs::GetCmd()
@@ -94,59 +95,83 @@ int* nFuncs::GetRoomPointer()
 	return reinterpret_cast<int*>(nMemory::dwRoomNumberPtr);
 }
 
-void nFuncs::room_goto_previous()
+void nFuncs::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nArgNumber = 0, PVOID arg1 = nullptr, PVOID arg2 = nullptr, PVOID arg3 = nullptr)
 {
-	static auto room_prev = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Prev);
-
-	room_prev();
-
-	nFuncs::GetCmd()->m_Interact = 0.0;
-}
-
-void nFuncs::room_goto_next()
-{
-	static auto room_next = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Next);
-
-	room_next();
-
-	nFuncs::GetCmd()->m_Interact = 0.0;
-}
-
-void nFuncs::room_restart()
-{
-	static auto room_restart = reinterpret_cast<int* (__cdecl*)()>(gVars::dwRoom_Restart); //Get the function for room_goto_previous
-
-	room_restart();
-
-	nFuncs::GetCmd()->m_Interact = 0.0;
-}
-
-void nFuncs::room_goto(DWORD nIndex)
-{
-	DWORD dwFunction = gVars::dwRoom_GoTo;
-	static const char* szFuncName = "room_goto";
-
-	audio_stop_all();
-
+	//Create the variables that will store information about the base of the stack.
 	unsigned int nStackBase;
 	unsigned int nStackPointer;
 
 	__asm
 	{
 		//Setup the variables for recovering the stack
-		mov nStackBase, ebp 
-		mov nStackPointer, esp 
+		mov nStackBase, ebp
+		mov nStackPointer, esp
 
-		//Prepare for function execution
-		mov eax, nIndex //move the desired room number onto the stack
-		mov esi, szFuncName //tell the game we're gonna call room_goto
-		push eax //push eax onto the stack, this'll serve as the first argument
-		call dwFunction //call the function
+		//Now let the game know which function we're gonna call.
+		mov esi, szFuncName
+	}
 
+	//Now let's push the arguments
+	if (nArgNumber)
+	{
+		if (nArgNumber >= 3)
+			__asm push arg3
+		
+		if (nArgNumber >= 2)
+			__asm push arg2
+
+		if (nArgNumber >= 1)
+			__asm push arg1
+	}
+
+	__asm
+	{
+		call dwFuncBase
+		
 		//Fix the stack
 		mov ebp, nStackBase
 		mov esp, nStackPointer
 	}
+}
+
+void nFuncs::room_goto_previous()
+{
+	CallGMLFunc("room_goto_previous", gVars::dwRoom_Prev);
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
+}
+
+void nFuncs::room_goto_next()
+{
+	CallGMLFunc("room_goto_next", gVars::dwRoom_Next);
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
+}
+
+void nFuncs::window_set_fullscreen(bool bFullscreen)
+{
+	CallGMLFunc("window_set_fullscreen", gVars::dwWindow_SetFullScreen, 1, (PVOID)bFullscreen);
+}
+
+void nFuncs::room_restart()
+{
+	CallGMLFunc("room_restart", gVars::dwRoom_Restart);
+
+	nFuncs::GetCmd()->m_Interact = 0.0;
+}
+
+void nFuncs::window_set_size(int x, int y)
+{
+	static const DWORD dwFunction = 0x43CC80;
+
+	CallGMLFunc("window_set_size", dwFunction, 2, (PVOID)x, (PVOID)y);
+}
+
+void nFuncs::room_goto(DWORD nIndex)
+{
+	audio_stop_all();
+
+	CallGMLFunc("room_goto", gVars::dwRoom_GoTo, 1, (PVOID)nIndex);
 
 	gVars::nTeleportsLeft = 0;
 	gVars::nLastRequested = nIndex;
@@ -165,6 +190,9 @@ void nFuncs::room_goto_meme(int nRoom)
 		gVars::nTeleportsLeft = (nCurRoom - 1) - nRoom;
 	}
 
+	if (gVars::nTeleportsLeft == 0)
+		room_restart();
+
 	nFuncs::GetCmd()->m_Interact = 0; //Movement Fix
 
 	gVars::nLastRequested = nRoom;
@@ -172,9 +200,7 @@ void nFuncs::room_goto_meme(int nRoom)
 
 void nFuncs::audio_stop_all()
 {
-	static auto audio_stop_all = reinterpret_cast<int* (__cdecl*)()>(gVars::dwAudio_Stop_All);
-
-	audio_stop_all();
+	CallGMLFunc("audio_stop_all", gVars::dwAudio_Stop_All);
 }
 
 DWORD* nMemory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)

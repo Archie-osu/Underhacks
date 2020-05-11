@@ -84,8 +84,8 @@ void nMenu::DrawMenu()
 				nCurrentTab = TAB_INFO;
 			if (ImGui::MenuItem("Player", "0", false))
 				nCurrentTab = TAB_PLAYER;
-			if (ImGui::MenuItem("World", "0", false))
-				nCurrentTab = TAB_WORLD;
+			if (ImGui::MenuItem("Game", "0", false))
+				nCurrentTab = TAB_GAME;
 
 			ImGui::EndMenuBar();
 		}
@@ -94,14 +94,11 @@ void nMenu::DrawMenu()
 		{
 		case TAB_INFO:
 			ImGui::Text("Info");
-			
-			ImGui::NewLine();
 
-			ImGui::Text("Underhacks version: 1.2.1");
+			ImGui::Text("Underhacks version: 1.3.0 Dev Preview 1");
 			ImGui::Text(std::string("Base Pointer: " + std::string("0x") + DecToHex(gVars::dwBase)).c_str()); //This is really messy :/
 			ImGui::Text(std::string("UserCmd Address: " + std::string("0x") + DecToHex(gVars::dwUserCmd)).c_str());
 			ImGui::Text(std::string("Current Room: " + std::to_string(*nFuncs::GetRoomPointer())).c_str());
-			ImGui::Text(std::string("GoToRoom Function: " + DecToHex(gVars::dwRoom_GoTo)).c_str());
 			ImGui::Text(std::string("global.interact: " + std::to_string(nFuncs::GetCmd()->m_Interact)).c_str());
 
 			if (ImGui::Button("Recalculate Addresses", ImVec2(175, 20)))
@@ -111,8 +108,6 @@ void nMenu::DrawMenu()
 		case TAB_PLAYER:
 			ImGui::Text("Player");
 
-			ImGui::NewLine();
-
 			ImGui::SliderDouble("Health", &nFuncs::GetCmd()->m_nHealth, 0, nFuncs::GetCmd()->m_nMaxHealth, "%.0f");
 			ImGui::SliderDouble("Max Health", &nFuncs::GetCmd()->m_nMaxHealth, nFuncs::GetCmd()->m_nHealth, 99.00, "%.0f");
 			ImGui::SliderDouble("LOVE", &nFuncs::GetCmd()->m_nLOVE, 0.0, 20.0, "%.0f");
@@ -120,10 +115,8 @@ void nMenu::DrawMenu()
 			ImGui::SliderDouble("Gold", &nFuncs::GetCmd()->m_nGold, 0.0, 9999.0, "%.0f", 2.0f);
 
 			break;
-		case TAB_WORLD:
+		case TAB_GAME:
 			ImGui::Text("World Tab");
-
-			ImGui::NewLine();
 
 			if (ImGui::Button("Previous Room", ImVec2(110, 20)))
 				nFuncs::room_goto_previous();
@@ -160,6 +153,19 @@ void nMenu::DrawMenu()
 				nFuncs::GetCmd()->m_Interact = 0;
 			}
 
+			ImGui::NewLine();
+
+			ImGui::Checkbox("Enable Fullscreen", &bFullScreen);
+			ImGui::PushItemWidth(vMenuSize.x / 4);
+			ImGui::InputInt("Window X", &nUndertaleX, 1, 100, ImGuiInputTextFlags_CharsNoBlank);
+			ImGui::SameLine();
+			ImGui::InputInt("Window Y", &nUndertaleY, 1, 100, ImGuiInputTextFlags_CharsNoBlank);
+			ImGui::PopItemWidth();
+
+			if (ImGui::Button("Apply window properties", ImVec2(175, 20))) {
+				nFuncs::window_set_fullscreen(bFullScreen);
+				nFuncs::window_set_size(nUndertaleX, nUndertaleY);
+			}
 
 			break;
 		}

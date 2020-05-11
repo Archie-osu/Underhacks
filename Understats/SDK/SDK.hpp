@@ -45,28 +45,33 @@ namespace nFuncs
 	CUserCmd* GetCmd();
 	int* GetRoomPointer();
 
+	void CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nArgNumber, PVOID arg1, PVOID arg2, PVOID arg3);
+
 	void room_goto(DWORD nRoom);
 	void room_goto_meme(int nRoomNumber);
 	void audio_stop_all();
 	void room_goto_previous();
 	void room_goto_next();
+	void window_set_fullscreen(bool bFullscreen);
 	void room_restart();
-
+	void window_set_size(int x, int y);
 }
 
 namespace gVars
 {
 	inline int nTeleportsLeft;
 	inline int nLastRequested;
+	//54CE10 = Main Loop
 
 	inline DWORD dwBase;
 	inline DWORD dwUserCmd;
 	inline DWORD dwAudio_Stop_All;
-	inline DWORD dwGameLoop;
 	inline DWORD dwRoom_Prev;
 	inline DWORD dwRoom_Next;
 	inline DWORD dwRoom_Restart;
 	inline DWORD dwRoom_GoTo;
+	inline DWORD dwWindow_SetFullScreen;
+	inline DWORD dwWindow_SetSize;
 
 	void Initialize();
 }
@@ -84,4 +89,3 @@ namespace nMemory //Every function related to Memory
 
 	DWORD FindPattern(const char* szModule, const char* pattern, const char* mask);
 }
-
