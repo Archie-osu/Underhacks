@@ -3,6 +3,7 @@
 
 //spook953 - today at 8:41PM:
 //why is GMFuncs a pointer
+
 //Pin - today at 8:42PM:
 //because I felt like it
 
@@ -59,7 +60,7 @@ public:
 	double m_nHealth; //Current Health
 };
 
-static struct COffsets
+struct COffsets
 {
 	DWORD dwBase;
 	DWORD dwUserCmd;
@@ -86,10 +87,10 @@ private:
 public:
 	CGMFunctions* GMFuncs		= new CGMFunctions;
 	CPlayerData* PlayerData		= new CPlayerData;
-	COffsets Offsets						= COffsets();
+	COffsets* Offsets					= new COffsets;
 
 	void Init(); //Execute this function to map the CUserCmds, get the correct D3DDevice, run the hooks
 	void Destroy(); //Called on DLL_PROCESS_DETACH
 };
 
-static CUndertale IGame = CUndertale();
+inline CUndertale IGame;

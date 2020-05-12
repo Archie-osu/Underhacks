@@ -3,7 +3,7 @@
 void CUndertale::Init()
 {
 	//There's room for more here, shall you wish =)
-	Offsets.Initialize();
+	Offsets->Initialize();
 }
 
 void CUndertale::Destroy()
@@ -11,6 +11,7 @@ void CUndertale::Destroy()
 	//Let's be a clean coder =)
 	delete this->GMFuncs;
 	delete this->PlayerData;
+	delete this->Offsets;
 }
 
 void COffsets::Initialize()
