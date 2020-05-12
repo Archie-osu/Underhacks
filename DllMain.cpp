@@ -1,13 +1,11 @@
-#include "Game/SDK/SDK.hpp"
-#include "Game/Interfaces/Interfaces.hpp"
+#include "Game/Core/Core.hpp"
 #include <Windows.h>
 
 DWORD WINAPI Main(LPVOID lpReserved)
 {
 	IGame.Init();
 
-	IGame.GMFuncs->window_set_size(1280, 720); //Crash due to a nullptr exception.
-
+	IGame.GMFuncs->window_set_size(1280, 720);
 
 	return 0x0;
 }

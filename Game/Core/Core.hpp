@@ -1,5 +1,6 @@
 #pragma once
 #include "../SDK/SDK.hpp"
+#include <d3d9.h>
 
 //spook953 - today at 8:41PM:
 //why is GMFuncs a pointer
@@ -22,7 +23,7 @@ private:
 	void CallGMLFunc(const char* szFuncName, DWORD dwFunction, int nParams, PVOID arg1, PVOID arg2, PVOID arg3);
 };
 
-struct CPlayerData
+struct CPlayerData //This private-public thing is just cancer
 {
 public:
 	double m_nIsInFight; //Set to 0 if we are not fighting, 1 if we are.
@@ -75,16 +76,22 @@ struct COffsets
 	void Initialize();
 };
 
-struct CDirectX
+struct CCORE
 {
+public:
+	typedef HRESULT(APIENTRY* tEndScene)(LPDIRECT3DDEVICE9 pDevice);
+	WNDPROC windowProc;
+	void* pDevice[119];
+	LPDIRECT3DDEVICE9 pD3DDevice = nullptr;
+	tEndScene oEndScene = nullptr;
 
+	void Initialize();
 };
 
 struct CUndertale
 {
-private:
-	CDirectX Direct3D					= CDirectX();
 public:
+	CCORE* CORE							= new CCORE;
 	CGMFunctions* GMFuncs		= new CGMFunctions;
 	CPlayerData* PlayerData		= new CPlayerData;
 	COffsets* Offsets					= new COffsets;

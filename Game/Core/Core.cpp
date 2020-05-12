@@ -1,8 +1,9 @@
-#include "Interfaces.hpp"
+#include "../Core/Core.hpp"
 
 void CUndertale::Init()
 {
 	//There's room for more here, shall you wish =)
+	CORE->Initialize();
 	Offsets->Initialize();
 }
 
@@ -12,6 +13,7 @@ void CUndertale::Destroy()
 	delete this->GMFuncs;
 	delete this->PlayerData;
 	delete this->Offsets;
+	delete this->CORE;
 }
 
 void COffsets::Initialize()
@@ -26,4 +28,15 @@ void COffsets::Initialize()
 	audio_stop_all					= Memory::FindUTPattern("\x80\x3D\x00\x00\x00\x00\x00\x75\x08\x6A\x00", "xx?????xxxx");
 	window_set_fullscreen	= room_goto - 0x778B0;
 	window_set_size				= window_set_fullscreen - 0x3EC10;
+}
+
+void CCORE::Initialize()
+{
+	//This is the CORE of the Core. Confusing, right? Well, simply said, this is where all the key functions reside.
+	//Things like Hooks and things needed for Underhacks to function as it does.
+	
+	if (DirectX::GetDirectDevice(pDevice, sizeof(pDevice)))
+		oEndScene = (tEndScene)TrampHook::Trampoline((char*)pDevice[42], (char*)Hooks::hkEndScene, 7);
+
+	//windowProc = (WNDPROC)(SetWindowLongW(FindWindowA(0, "UNDERTALE"), GWLP_WNDPROC, (LONG_PTR)(&IGame.CORE->hkWndProc)));
 }

@@ -1,5 +1,5 @@
 #include "SDK.hpp"
-#include "../Interfaces/Interfaces.hpp"
+#include "../Core/Core.hpp"
 #include <TlHelp32.h>
 
 #pragma warning(disable : 4731)
@@ -24,17 +24,14 @@ void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nAr
 	}
 
 	//Now let's push the arguments
-	if (nArgNumber)
-	{
-		if (nArgNumber >= 3)
-			__asm push arg3
+	if (nArgNumber >= 3)
+		__asm push arg3
 
-		if (nArgNumber >= 2)
-			__asm push arg2
+	if (nArgNumber >= 2)
+		__asm push arg2
 
-		if (nArgNumber >= 1)
-			__asm push arg1
-	}
+	if (nArgNumber >= 1)
+		__asm push arg1
 
 	__asm
 	{
@@ -155,4 +152,57 @@ DWORD* Memory::ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers)
 DWORD Memory::FindUTPattern(const char* szPattern, const char* szMask)
 {
 	return FindPattern("UNDERTALE.exe", szPattern, szMask);
+}
+
+bool DirectX::GetDirectDevice(void** pTable, size_t Size)
+{
+	return false;
+}
+
+bool TrampHook::Hook(char* szSource, char* szDestination, int nLenght)
+{
+	if (nLenght < 5) return false;
+
+	DWORD curProtection;
+
+	VirtualProtect(szSource, nLenght, PAGE_EXECUTE_READWRITE, &curProtection);
+
+	memset(szSource, 0x90, nLenght);
+
+	uintptr_t relativeAddress = (uintptr_t)(szDestination - szSource - 5);
+
+	*szSource = (char)0xE9;
+	*(uintptr_t*)(szSource + 1) = (uintptr_t)relativeAddress;
+
+	DWORD temp;
+	VirtualProtect(szSource, nLenght, curProtection, &temp);
+
+	return true;
+}
+
+char* TrampHook::Trampoline(char* szSource, char* szDestination, unsigned int nLenght)
+{
+	if (nLenght < 5) return 0;
+
+	// Create the gateway (len + 5 for the overwritten bytes + the jmp)
+	char* gateway = (char*)VirtualAlloc(0, nLenght + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+
+	// Put the bytes that will be overwritten in the gateway
+	memcpy(gateway, szSource, nLenght);
+
+	// Get the gateway to destination addy
+	uintptr_t gateJmpAddy = (uintptr_t)(szSource - gateway - 5);
+
+	// Add the jmp opcode to the end of the gateway
+	*(gateway + nLenght) = (char)0xE9;
+
+	// Add the address to the jmp
+	*(uintptr_t*)(gateway + nLenght + 1) = gateJmpAddy;
+
+	// Place the hook at the destination
+	if (Hook(szSource, szDestination, nLenght))
+	{
+		return gateway;
+	}
+	else return nullptr;
 }
