@@ -30,7 +30,7 @@ public:
 private:
 	UCHAR pad0[0x16];
 public:
-	double m_Interact; //global.interact?
+	double m_Interact; //global.interact
 private:
 	UCHAR pad1[0xA2];
 public:
@@ -64,7 +64,6 @@ public:
 struct COffsets
 {
 	DWORD dwBase;
-	DWORD dwUserCmd;
 	DWORD audio_stop_all;
 	DWORD room_goto_previous;
 	DWORD room_goto_next;
@@ -80,21 +79,31 @@ struct CCORE
 {
 public:
 	typedef HRESULT(APIENTRY* tEndScene)(LPDIRECT3DDEVICE9 pDevice);
-	WNDPROC windowProc;
-	void* pDevice[119];
-	LPDIRECT3DDEVICE9 pD3DDevice = nullptr;
-	tEndScene oEndScene = nullptr;
+	WNDPROC windowProc				= nullptr;
+	void* pDevice[119]				= { nullptr };
+	LPDIRECT3DDEVICE9 pD3DDevice	= nullptr;
+	tEndScene oEndScene				= nullptr;
 
 	void Initialize();
+};
+
+struct CCheat
+{
+	int nDesiredRoom = 0; //Used in teleports
+
+	int GetMaxHP();
+
+	WndProperties_t vGameProperties = WndProperties_t(); //Stores the resolution and fullscreen values.
 };
 
 struct CUndertale
 {
 public:
-	CCORE* CORE							= new CCORE;
+	CCORE* CORE					= new CCORE;
 	CGMFunctions* GMFuncs		= new CGMFunctions;
 	CPlayerData* PlayerData		= new CPlayerData;
-	COffsets* Offsets					= new COffsets;
+	COffsets* Offsets			= new COffsets;
+	CCheat* Underhacks			= new CCheat;
 
 	void Init(); //Execute this function to map the CUserCmds, get the correct D3DDevice, run the hooks
 	void Destroy(); //Called on DLL_PROCESS_DETACH

@@ -11,10 +11,23 @@ namespace Memory
 	MODULEINFO GetModuleInfo(const char* szModule);
 	DWORD* ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers);
 	DWORD FindUTPattern(const char* szPattern, const char* szMask);
+
+	constexpr DWORD dwCommand = 0x3F9F44; //How do I find this in memory? :thinking:
+	//Pattern scanning?
 }
+
+struct WndProperties_t
+{
+	int iWidth, iHeight;
+	bool bFullscreen;
+};
 
 namespace DirectX
 {
+	inline HWND hwWindow = NULL;
+
+	BOOL __stdcall EnumWindowsCallback(HWND handle, LPARAM lParam);
+	HWND GetProcessWindow();
 	bool GetDirectDevice(void** pTable, size_t Size);
 }
 

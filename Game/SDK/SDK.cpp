@@ -154,9 +154,64 @@ DWORD Memory::FindUTPattern(const char* szPattern, const char* szMask)
 	return FindPattern("UNDERTALE.exe", szPattern, szMask);
 }
 
+BOOL __stdcall DirectX::EnumWindowsCallback(HWND handle, LPARAM lParam)
+{
+	DWORD wndProcId;
+	GetWindowThreadProcessId(handle, &wndProcId);
+
+	if (GetCurrentProcessId() != wndProcId)
+		return true; // skip to next window
+
+	hwWindow = handle;
+	return false;
+}
+
+HWND DirectX::GetProcessWindow()
+{
+	hwWindow = NULL;
+	EnumWindows(EnumWindowsCallback, NULL);
+	return hwWindow;
+}
+
 bool DirectX::GetDirectDevice(void** pTable, size_t Size)
 {
-	return false;
+	if (!pTable)
+		return false;
+
+	IDirect3D9* pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+
+	if (!pD3D)
+		return false;
+
+	IDirect3DDevice9* pDummyDevice = NULL;
+
+	// options to create dummy device
+	D3DPRESENT_PARAMETERS d3dpp = {};
+	d3dpp.Windowed = true;
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	d3dpp.hDeviceWindow = GetProcessWindow();
+
+	HRESULT dummyDeviceCreated = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDummyDevice);
+
+	if (dummyDeviceCreated != S_OK)
+	{
+		// may fail in windowed fullscreen mode, trying again with windowed mode
+		d3dpp.Windowed = !d3dpp.Windowed;
+
+		dummyDeviceCreated = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDummyDevice);
+
+		if (dummyDeviceCreated != S_OK)
+		{
+			pD3D->Release();
+			return false;
+		}
+	}
+
+	memcpy(pTable, *reinterpret_cast<void***>(pDummyDevice), Size);
+
+	pDummyDevice->Release();
+	pD3D->Release();
+	return true;
 }
 
 bool TrampHook::Hook(char* szSource, char* szDestination, int nLenght)
@@ -205,4 +260,17 @@ char* TrampHook::Trampoline(char* szSource, char* szDestination, unsigned int nL
 		return gateway;
 	}
 	else return nullptr;
+}
+
+int CCheat::GetMaxHP()
+{
+	int LOVE = static_cast<int>(IGame.PlayerData->m_nLOVE);
+
+	if (LOVE == 20)
+		return 99;
+
+	if (LOVE <= 19)
+		return 20 + ((LOVE - 1) * 4);
+
+	return -1;
 }
