@@ -18,8 +18,8 @@ namespace Memory
 
 struct WndProperties_t
 {
-	int iWidth, iHeight;
-	bool bFullscreen;
+	int iWidth = 1280, iHeight = 720;
+	bool bFullscreen = false;
 };
 
 namespace DirectX

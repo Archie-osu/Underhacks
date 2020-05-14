@@ -262,6 +262,14 @@ char* TrampHook::Trampoline(char* szSource, char* szDestination, unsigned int nL
 	else return nullptr;
 }
 
+void CCheat::DoubleProxy()
+{
+	//This function sets the CPlayerData or whatever is represented as a double
+	//to their bool representation respectively.
+
+	IGame.PlayerData->m_nDebug = static_cast<double>(this->bDebugMode);
+}
+
 int CCheat::GetMaxHP()
 {
 	int LOVE = static_cast<int>(IGame.PlayerData->m_nLOVE);

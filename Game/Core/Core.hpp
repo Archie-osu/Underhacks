@@ -59,6 +59,10 @@ private:
 	UCHAR pad7[0x8];
 public:
 	double m_nHealth; //Current Health
+private:
+	UCHAR pad8[0x8];
+public:
+	double m_nDebug; //Global.debug
 };
 
 struct COffsets
@@ -90,7 +94,9 @@ public:
 struct CCheat
 {
 	int nDesiredRoom = 0; //Used in teleports
+	bool bDebugMode	= 0;
 
+	void DoubleProxy();
 	int GetMaxHP();
 
 	WndProperties_t vGameProperties = WndProperties_t(); //Stores the resolution and fullscreen values.
