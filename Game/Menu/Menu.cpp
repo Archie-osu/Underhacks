@@ -3,9 +3,6 @@
 #include "ImGui/imgui_impl_dx9.h"
 #include "ImGui/imgui_impl_win32.h"
 
-//THIS IS A DEVELOPMENT PREVIEW
-//NOT ALL FEATURES ARE IMPLEMENTED!
-
 void nMenu::SetStyleDefault()
 {
 	if (!bInitializedWnd)
@@ -21,7 +18,7 @@ void nMenu::SetStyleDefault()
 	Style.FramePadding = ImVec2(5.0f, 2.0f);
 	Style.ItemSpacing = ImVec2(8.0f, 6.0f);
 	Style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-	Style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+	Style.WindowTitleAlign = ImVec2(0.1f, 0.5f);
 	Style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 	Style.WindowBorderSize = 1.0f;
 	Style.WindowRounding = 6.0f;
@@ -138,8 +135,6 @@ void nMenu::SetStyleSans()
 
 void nMenu::SetStyle()
 {
-	return;
-
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text] = ImVec4(0.53f, 0.00f, 0.00f, 1.00f);
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
@@ -191,6 +186,14 @@ void nMenu::SetStyle()
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 }
 
+DWORD nMenu::GetMenuKey()
+{
+	if (!nMenuKey) //If nMenuKey is zero
+		return VK_INSERT;
+	
+	return VK_TAB; //Else do this..
+}
+
 void nMenu::DrawGraphics()
 {
 	switch (nTheme)
@@ -198,13 +201,14 @@ void nMenu::DrawGraphics()
 	case THEME_NORMAL:
 		ImGui::PushFont(fontDefault);
 		break;
-	case THEME_sans:
+	case THEME_SANS:
 		ImGui::PushFont(fontSans);
 		break;
 	default:
 		ImGui::PushFont(fontChara);
 		break;
 	}
+
 
 	if (ImGui::Begin(cszMenuName, nullptr, MenuWindowFlags))
 	{
@@ -213,7 +217,7 @@ void nMenu::DrawGraphics()
 		case THEME_NORMAL:
 			SetStyleDefault();
 			break;
-		case THEME_sans:
+		case THEME_SANS:
 			SetStyleSans();
 			break;
 		default:
@@ -271,16 +275,29 @@ void nMenu::DrawGraphics()
 				IGame.GMFuncs->room_goto(IGame.Underhacks->nDesiredRoom);
 			}
 
+			ImGui::SameLine();
+
+			if (ImGui::Button("Next Room", ImVec2(100, 23))) {
+				IGame.GMFuncs->room_goto_next();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Previous Room", ImVec2(125, 23))) {
+				IGame.GMFuncs->room_goto_previous();
+			}
+
 			break;
 		case TAB_TOOL:
 			ImGui::Text("About:");
-			ImGui::Text("Version: 1.3");
-			ImGui::Text("Author: Pin");
+			ImGui::Text("Version: 1.3.1");
+			ImGui::Text("Authors: Pin & elite_pleb");
 			ImGui::Text("Special thanks to: Grossleymoo, Jockeholm, colinator27");
 			ImGui::Text("for supporting the development and helping in general.");
 			ImGui::Separator();
 
 			ImGui::Combo("Theme", &nTheme, cszThemes, IM_ARRAYSIZE(cszThemes));
+			ImGui::Combo("Menu Key", &nMenuKey, cszMenuKeys, IM_ARRAYSIZE(cszMenuKeys));
 		}
 
 		ImGui::PopFont();
@@ -305,7 +322,7 @@ void nMenu::Start(LPDIRECT3DDEVICE9 pDevice)
 		bInitializedDX9 = true;
 	}
 
-	if (GetAsyncKeyState(VK_INSERT) & 1)
+	if (GetAsyncKeyState(GetMenuKey()) & 1)
 		bMenuOpen = !bMenuOpen;
 
 	if (!bMenuOpen)

@@ -4,7 +4,7 @@
 
 #pragma warning(disable : 4731)
 
-void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nArgNumber = 0, PVOID arg1 = nullptr, PVOID arg2 = nullptr, PVOID arg3 = nullptr)
+void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, PVOID arg1, PVOID arg2, PVOID arg3)
 {
 	if (dwFuncBase == 0)
 		return;
@@ -24,13 +24,13 @@ void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nAr
 	}
 
 	//Now let's push the arguments
-	if (nArgNumber >= 3)
+	if (arg3 != nullptr)
 		__asm push arg3
 
-	if (nArgNumber >= 2)
+	if (arg2 != nullptr)
 		__asm push arg2
 
-	if (nArgNumber >= 1)
+	if (arg1 != nullptr)
 		__asm push arg1
 
 	__asm
@@ -45,7 +45,7 @@ void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, int nAr
 
 void CGMFunctions::room_goto(int nRoomNumber)
 {
-	return CallGMLFunc("room_goto", IGame.Offsets->room_goto, 1, (PVOID)nRoomNumber);
+	return CallGMLFunc("room_goto", IGame.Offsets->room_goto, (PVOID)nRoomNumber);
 }
 
 void CGMFunctions::room_goto_meme(int nRoomNumber)
@@ -71,7 +71,7 @@ void CGMFunctions::room_goto_next()
 
 void CGMFunctions::window_set_fullscreen(bool bFullscreen)
 {
-	return CallGMLFunc("window_set_fullscreen", IGame.Offsets->window_set_fullscreen, 1, (PVOID)bFullscreen);
+	return CallGMLFunc("window_set_fullscreen", IGame.Offsets->window_set_fullscreen, (PVOID)bFullscreen);
 }
 
 void CGMFunctions::room_restart()
@@ -81,7 +81,7 @@ void CGMFunctions::room_restart()
 
 void CGMFunctions::window_set_size(int x, int y)
 {
-	return CallGMLFunc("window_set_size", IGame.Offsets->window_set_size, 2, (PVOID)x, (PVOID)y);
+	return CallGMLFunc("window_set_size", IGame.Offsets->window_set_size, (PVOID)x, (PVOID)y);
 }
 
 HMODULE Memory::GetModuleHandleSafe(const wchar_t* pszModuleName)

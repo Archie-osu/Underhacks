@@ -20,7 +20,7 @@ struct CGMFunctions
 	void window_set_size(int x, int y);
 
 private:
-	void CallGMLFunc(const char* szFuncName, DWORD dwFunction, int nParams, PVOID arg1, PVOID arg2, PVOID arg3);
+	void CallGMLFunc(const char* szFuncName, DWORD dwFunction, PVOID arg1 = nullptr, PVOID arg2 = nullptr, PVOID arg3 = nullptr);
 };
 
 struct CPlayerData //This private-public thing is just cancer
