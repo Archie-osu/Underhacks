@@ -3,6 +3,9 @@
 #include <Psapi.h>
 #include <vector>
 #include <d3d9.h>
+#include <string>
+
+#define HARDCODED constexpr
 
 namespace Memory
 {
@@ -12,8 +15,29 @@ namespace Memory
 	DWORD* ReadPointerPath(DWORD dwBase, std::vector<DWORD> vPointers);
 	DWORD FindUTPattern(const char* szPattern, const char* szMask);
 
-	constexpr DWORD dwCommand = 0x3F9F44; //How do I find this in memory? :thinking:
+
+	namespace Windows
+	{
+		HWND GetWindowByName(std::wstring szProcessName);
+		HANDLE GetProcessByName(std::wstring szProcessName, DWORD dwAccess = PROCESS_ALL_ACCESS);
+
+		struct FunctionCallback
+		{
+			DWORD dwProcessId = 0;
+			HWND hwWindow = 0;
+
+			BOOL IsMainWindow(HWND handle)
+			{
+				return GetWindow(handle, GW_OWNER) == (HWND)0 && IsWindowVisible(handle);
+			}
+		};
+
+		bool CALLBACK EnumWndCallback(HWND hwnd, LPARAM lParam);
+	}
+
+	HARDCODED DWORD dwCommand = 0x3F9F44; //How do I find this in memory? :thinking:
 	//Pattern scanning?
+	HARDCODED DWORD dwRoomNumber = 0xA18EA0;
 }
 
 struct WndProperties_t

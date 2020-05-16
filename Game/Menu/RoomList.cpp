@@ -1,6 +1,7 @@
 #include "Menu.hpp"
+#include "../SDK/SDK.hpp"
 
-const char* nMenu::cszRooms[]{  //All the rooms - ToDo: Find this in memory so I don't have to index this.
+const char* cszRooms[]{  //All the rooms - ToDo: Find this in memory so I don't have to index this.
 	  "room_start"
 	, "room_introstory"
 	, "room_introimage"

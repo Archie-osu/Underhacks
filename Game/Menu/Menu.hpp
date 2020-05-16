@@ -2,10 +2,11 @@
 #include "../Core/Core.hpp"
 #include "ImGui/imgui.h"
 
+extern const char* cszRooms[];
+
 namespace nMenu
 {
 	static const char* cszThemes[] = { "Underhacks", "sans.", "Megalomaniac"};
-	extern const char* cszRooms[];
 	static const char* cszMenuKeys[] = { "INSERT", "TAB" };
 
 	enum MenuTabs_t
@@ -38,7 +39,7 @@ namespace nMenu
 
 	inline ImFont* fontDefault		= nullptr; //Bahnschrift.
 	inline ImFont* fontSans			= nullptr; //comic sans
-	inline ImFont* fontChara		= nullptr; //Do NOT force this =)
+	inline ImFont* fontChara		= nullptr; //Times New Roman
 
 	const ImVec2 vMenuSize = ImVec2((float)400, (float)340);
 	constexpr const char* cszMenuName = "Underhacks";

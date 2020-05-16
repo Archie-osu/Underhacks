@@ -1,5 +1,7 @@
 #include "Menu.hpp"
 
+#include <string>
+
 #include "ImGui/imgui_impl_dx9.h"
 #include "ImGui/imgui_impl_win32.h"
 
@@ -18,7 +20,7 @@ void nMenu::SetStyleDefault()
 	Style.FramePadding = ImVec2(5.0f, 2.0f);
 	Style.ItemSpacing = ImVec2(8.0f, 6.0f);
 	Style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-	Style.WindowTitleAlign = ImVec2(0.1f, 0.5f);
+	Style.WindowTitleAlign = ImVec2(0.02f, 0.5f);
 	Style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 	Style.WindowBorderSize = 1.0f;
 	Style.WindowRounding = 6.0f;
@@ -289,12 +291,12 @@ void nMenu::DrawGraphics()
 
 			break;
 		case TAB_TOOL:
-			ImGui::Text("About:");
-			ImGui::Text("Version: 1.3.1");
+			ImGui::Text("Version: 1.3.2");
 			ImGui::Text("Authors: Pin & elite_pleb");
 			ImGui::Text("Special thanks to: Grossleymoo, Jockeholm, colinator27");
 			ImGui::Text("for supporting the development and helping in general.");
 			ImGui::Separator();
+			ImGui::Text(std::string("Current Room: " + IGame.Underhacks->GetRoomName(*IGame.Offsets->room_number)).c_str());
 
 			ImGui::Combo("Theme", &nTheme, cszThemes, IM_ARRAYSIZE(cszThemes));
 			ImGui::Combo("Menu Key", &nMenuKey, cszMenuKeys, IM_ARRAYSIZE(cszMenuKeys));
@@ -311,7 +313,7 @@ void nMenu::Start(LPDIRECT3DDEVICE9 pDevice)
 	if (!bInitializedDX9)
 	{
 		ImGui::CreateContext();
-		ImGui_ImplWin32_Init(FindWindowA(0, "UNDERTALE"));
+		ImGui_ImplWin32_Init(Memory::Windows::GetWindowByName(L"UNDERTALE.exe"));
 		ImGui_ImplDX9_Init(pDevice);
 
 		ImGuiIO& curIO = ImGui::GetIO();

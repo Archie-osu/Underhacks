@@ -2,6 +2,7 @@
 #include "../Core/Core.hpp"
 #include <TlHelp32.h>
 
+
 #pragma warning(disable : 4731)
 
 void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, PVOID arg1, PVOID arg2, PVOID arg3)
@@ -281,4 +282,55 @@ int CCheat::GetMaxHP()
 		return 20 + ((LOVE - 1) * 4);
 
 	return -1;
+}
+
+std::string CCheat::GetRoomName(int nIndex)
+{
+	extern const char* cszRooms[];
+
+	return std::string(cszRooms[nIndex]);
+}
+
+HWND Memory::Windows::GetWindowByName(std::wstring szProcessName)
+{
+	using namespace Memory::Windows;
+
+	FunctionCallback FunctionData;
+	FunctionData.dwProcessId = GetProcessId(GetProcessByName(szProcessName));
+
+	EnumWindows((WNDENUMPROC)(EnumWndCallback), reinterpret_cast<LPARAM>(&FunctionData));
+
+	return FunctionData.hwWindow;
+}
+
+HANDLE Memory::Windows::GetProcessByName(std::wstring szProcessName, DWORD dwAccess)
+{
+	const WCHAR* wPEName = szProcessName.c_str();
+	HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32 mEntry; mEntry.dwSize = sizeof(PROCESSENTRY32);
+	Process32First(hProcess, &mEntry);
+	do
+	{
+		if (wcscmp(wPEName, mEntry.szExeFile) == 0)
+		{
+			CloseHandle(hProcess); //Let's avoid memory leaks
+			return OpenProcess(dwAccess, FALSE, mEntry.th32ProcessID);
+		}
+		else continue;
+	} while (Process32Next(hProcess, &mEntry));
+
+	CloseHandle(hProcess);
+
+	return 0;
+}
+
+bool CALLBACK Memory::Windows::EnumWndCallback(HWND hwnd, LPARAM lParam)
+{
+	FunctionCallback& data = *(FunctionCallback*)lParam;
+	unsigned long process_id = 0;
+	GetWindowThreadProcessId(hwnd, &process_id);
+	if (data.dwProcessId != process_id || !data.IsMainWindow(hwnd))
+		return true;
+	data.hwWindow = hwnd;
+	return false;
 }

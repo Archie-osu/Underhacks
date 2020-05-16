@@ -30,6 +30,7 @@ void COffsets::Initialize()
 	audio_stop_all				= Memory::FindUTPattern("\x80\x3D\x00\x00\x00\x00\x00\x75\x08\x6A\x00", "xx?????xxxx");
 	window_set_fullscreen		= room_goto - 0x778B0;
 	window_set_size				= window_set_fullscreen + 0x630;
+	room_number					= reinterpret_cast<int*>(Memory::dwRoomNumber);
 }
 
 void CCORE::Initialize()
@@ -40,5 +41,5 @@ void CCORE::Initialize()
 	if (DirectX::GetDirectDevice(pDevice, sizeof(pDevice)))
 		oEndScene = (tEndScene)TrampHook::Trampoline((char*)pDevice[42], (char*)Hooks::hkEndScene, 7);
 
-	windowProc = (WNDPROC)(SetWindowLongW(FindWindowA(0, "UNDERTALE"), GWLP_WNDPROC, (LONG_PTR)(&Hooks::hkWndProc)));
+	windowProc = (WNDPROC)(SetWindowLongW(Memory::Windows::GetWindowByName(L"UNDERTALE.exe"), GWLP_WNDPROC, (LONG_PTR)(&Hooks::hkWndProc)));
 }

@@ -75,6 +75,7 @@ struct COffsets
 	DWORD room_goto;
 	DWORD window_set_fullscreen;
 	DWORD window_set_size;
+	int*  room_number;
 
 	void Initialize();
 };
@@ -98,6 +99,7 @@ struct CCheat
 
 	void DoubleProxy();
 	int GetMaxHP();
+	std::string GetRoomName(int nIndex);
 
 	WndProperties_t vGameProperties = WndProperties_t(); //Stores the resolution and fullscreen values.
 };
