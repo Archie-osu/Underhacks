@@ -5,7 +5,7 @@
 
 #pragma warning(disable : 4731)
 
-void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, PVOID arg1, PVOID arg2, PVOID arg3)
+void CGMFunctions::CallGMLFunc(DWORD dwFuncBase, PVOID arg1, PVOID arg2, PVOID arg3)
 {
 	if (dwFuncBase == 0)
 		return;
@@ -21,7 +21,7 @@ void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, PVOID a
 		mov nStackPointer, esp
 
 		//Now let the game know which function we're gonna call.
-		mov esi, szFuncName
+		//mov esi, szFuncName
 	}
 
 	//Now let's push the arguments
@@ -46,7 +46,7 @@ void CGMFunctions::CallGMLFunc(const char* szFuncName, DWORD dwFuncBase, PVOID a
 
 void CGMFunctions::room_goto(int nRoomNumber)
 {
-	return CallGMLFunc("room_goto", IGame.Offsets->room_goto, (PVOID)nRoomNumber);
+	return CallGMLFunc(IGame.Offsets->room_goto, (PVOID)nRoomNumber);
 }
 
 void CGMFunctions::room_goto_meme(int nRoomNumber)
@@ -57,32 +57,32 @@ void CGMFunctions::room_goto_meme(int nRoomNumber)
 
 void CGMFunctions::audio_stop_all()
 {
-	return CallGMLFunc("audio_stop_all", IGame.Offsets->audio_stop_all);
+	return CallGMLFunc(IGame.Offsets->audio_stop_all);
 }
 
 void CGMFunctions::room_goto_previous()
 {
-	return CallGMLFunc("room_goto_previous", IGame.Offsets->room_goto_previous);
+	return CallGMLFunc(IGame.Offsets->room_goto_previous);
 }
 
 void CGMFunctions::room_goto_next()
 {
-	return CallGMLFunc("room_goto_next", IGame.Offsets->room_goto_next);
+	return CallGMLFunc(IGame.Offsets->room_goto_next);
 }
 
 void CGMFunctions::window_set_fullscreen(bool bFullscreen)
 {
-	return CallGMLFunc("window_set_fullscreen", IGame.Offsets->window_set_fullscreen, (PVOID)bFullscreen);
+	return CallGMLFunc(IGame.Offsets->window_set_fullscreen, (PVOID)bFullscreen);
 }
 
 void CGMFunctions::room_restart()
 {
-	return CallGMLFunc("room_restart", IGame.Offsets->room_restart);
+	return CallGMLFunc(IGame.Offsets->room_restart);
 }
 
 void CGMFunctions::window_set_size(int x, int y)
 {
-	return CallGMLFunc("window_set_size", IGame.Offsets->window_set_size, (PVOID)x, (PVOID)y);
+	return CallGMLFunc(IGame.Offsets->window_set_size, (PVOID)x, (PVOID)y);
 }
 
 HMODULE Memory::GetModuleHandleSafe(const wchar_t* pszModuleName)

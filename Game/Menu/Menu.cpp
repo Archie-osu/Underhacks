@@ -246,7 +246,12 @@ void nMenu::DrawGraphics()
 			ImGui::SliderDouble("LOVE", &IGame.PlayerData->m_nLOVE, 1, 20, "%.0f");
 			ImGui::SliderDouble("EXP", &IGame.PlayerData->m_nEXP, 0, 50000, "%.0f");
 			ImGui::SliderDouble("Gold", &IGame.PlayerData->m_nGold, 0, 10000, "%.0f");
-			ImGui::Checkbox("Debug Mode", &IGame.Underhacks->bDebugMode);
+			ImGui::Checkbox("Debug Mode", &IGame.Underhacks->bDebugMode); ImGui::SameLine();
+
+			if (ImGui::Button("Fix Move", ImVec2(75, 23)))
+			{
+				IGame.PlayerData->m_Interact = 0;
+			}
 
 			ImGui::Separator();
 
@@ -291,7 +296,7 @@ void nMenu::DrawGraphics()
 
 			break;
 		case TAB_TOOL:
-			ImGui::Text("Version: 1.3.2");
+			ImGui::Text("Version: 1.3.3");
 			ImGui::Text("Authors: Pin & elite_pleb");
 			ImGui::Text("Special thanks to: Grossleymoo, Jockeholm, colinator27");
 			ImGui::Text("for supporting the development and helping in general.");
